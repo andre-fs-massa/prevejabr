@@ -1,23 +1,36 @@
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Menu, X } from "lucide-react";
+import { TrendingUp, Menu, X, LogOut, User } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <a href="/" className="flex items-center gap-2 group">
+          <Link to="/" className="flex items-center gap-2 group">
             <div className="w-10 h-10 rounded-xl gradient-hero flex items-center justify-center shadow-glow">
               <TrendingUp className="w-5 h-5 text-primary-foreground" />
             </div>
             <span className="font-display text-xl font-bold text-foreground">
               Preveja<span className="text-primary">.br</span>
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
@@ -34,8 +47,31 @@ const Header = () => {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost">Entrar</Button>
-            <Button variant="default">Criar Conta</Button>
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="gap-2">
+                    <User className="w-4 h-4" />
+                    <span className="max-w-32 truncate">{user.email}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={handleSignOut} className="gap-2 cursor-pointer">
+                    <LogOut className="w-4 h-4" />
+                    Sair
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <>
+                <Button variant="ghost" asChild>
+                  <Link to="/auth">Entrar</Link>
+                </Button>
+                <Button variant="default" asChild>
+                  <Link to="/auth">Criar Conta</Link>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -61,8 +97,26 @@ const Header = () => {
                 Categorias
               </a>
               <div className="flex flex-col gap-2 pt-4 border-t border-border">
-                <Button variant="ghost" className="w-full">Entrar</Button>
-                <Button variant="default" className="w-full">Criar Conta</Button>
+                {user ? (
+                  <>
+                    <p className="text-sm text-muted-foreground truncate px-4 py-2">
+                      {user.email}
+                    </p>
+                    <Button variant="ghost" className="w-full gap-2" onClick={handleSignOut}>
+                      <LogOut className="w-4 h-4" />
+                      Sair
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button variant="ghost" className="w-full" asChild>
+                      <Link to="/auth">Entrar</Link>
+                    </Button>
+                    <Button variant="default" className="w-full" asChild>
+                      <Link to="/auth">Criar Conta</Link>
+                    </Button>
+                  </>
+                )}
               </div>
             </nav>
           </div>
