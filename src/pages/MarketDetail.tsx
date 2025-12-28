@@ -163,8 +163,16 @@ const MarketDetail = () => {
     };
   }, [id]);
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("pt-BR", {
+  const formatDate = (dateString: string, short = false) => {
+    const date = new Date(dateString);
+    if (short) {
+      return date.toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+    }
+    return date.toLocaleDateString("pt-BR", {
       day: "2-digit",
       month: "long",
       year: "numeric",
@@ -336,8 +344,9 @@ const MarketDetail = () => {
                     <Clock className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
                     <div className="min-w-0">
                       <p className="text-[10px] sm:text-xs">Encerra em</p>
-                      <p className="text-xs sm:text-sm font-medium text-foreground truncate">
-                        {formatDate(market.end_date)}
+                      <p className="text-xs sm:text-sm font-medium text-foreground">
+                        <span className="sm:hidden">{formatDate(market.end_date, true)}</span>
+                        <span className="hidden sm:inline">{formatDate(market.end_date)}</span>
                       </p>
                     </div>
                   </div>
