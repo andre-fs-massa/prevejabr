@@ -110,6 +110,8 @@ const OrderForm = ({
       side: selectedSide,
       amount: amountValue,
       price: currentPrice,
+      status: "filled",
+      filled_at: new Date().toISOString(),
     });
 
     if (error) {
