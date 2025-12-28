@@ -8,7 +8,7 @@ interface MarketCardProps {
   noPrice: number;
   volume: string;
   endDate: string;
-  traders: number;
+  traders?: number;
   trending?: "up" | "down";
   featured?: boolean;
 }
@@ -26,7 +26,7 @@ const MarketCard = ({
 }: MarketCardProps) => {
   return (
     <div
-      className={`group relative rounded-2xl p-6 transition-all duration-300 hover:scale-[1.02] ${
+      className={`group relative rounded-2xl p-6 transition-all duration-300 hover:scale-[1.02] cursor-pointer ${
         featured
           ? "bg-gradient-to-br from-primary/10 via-card to-card border-2 border-primary/20 shadow-glow"
           : "bg-card border border-border shadow-soft hover:shadow-card"
@@ -73,10 +73,12 @@ const MarketCard = ({
           <Clock className="w-4 h-4" />
           <span>{endDate}</span>
         </div>
-        <div className="flex items-center gap-1">
-          <Users className="w-4 h-4" />
-          <span>{traders}</span>
-        </div>
+        {traders !== undefined && (
+          <div className="flex items-center gap-1">
+            <Users className="w-4 h-4" />
+            <span>{traders}</span>
+          </div>
+        )}
         <span className="font-medium text-foreground">{volume}</span>
       </div>
     </div>
