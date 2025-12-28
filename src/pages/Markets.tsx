@@ -260,9 +260,9 @@ const Markets = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredMarkets.map((market) => (
+                <Link to={`/markets/${market.id}`} key={market.id}>
                 <article
-                  key={market.id}
-                  className="bg-card rounded-2xl border border-border p-6 hover:shadow-card transition-all duration-300 group"
+                  className="bg-card rounded-2xl border border-border p-6 hover:shadow-card transition-all duration-300 group cursor-pointer"
                 >
                   {/* Category & Status */}
                   <div className="flex items-center justify-between mb-4">
@@ -328,6 +328,7 @@ const Markets = () => {
                     </span>
                   </div>
                 </article>
+                </Link>
               ))}
             </div>
           )}
