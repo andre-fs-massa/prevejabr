@@ -151,7 +151,9 @@
 
   .text-gradient {
     @apply bg-clip-text text-transparent;
-    background: var(--gradient-gold);
+    background: linear-gradient(135deg, hsl(45 93% 55%) 0%, hsl(38 95% 60%) 50%, hsl(32 90% 55%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   .animate-float {
