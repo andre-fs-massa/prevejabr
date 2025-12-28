@@ -293,7 +293,11 @@ const OrderForm = ({
         {/* Submit Button */}
         <Button
           type="submit"
-          className="w-full"
+          className={`w-full ${
+            selectedSide === "yes"
+              ? "bg-primary hover:bg-primary/90"
+              : "bg-destructive hover:bg-destructive/90"
+          }`}
           size="default"
           disabled={loading || !amount || parseFloat(amount) <= 0}
         >
