@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import OrderForm from "@/components/OrderForm";
 import ResolveMarketDialog from "@/components/ResolveMarketDialog";
+import MarketComments from "@/components/MarketComments";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -398,6 +399,9 @@ const MarketDetail = () => {
                   </div>
                 )}
               </div>
+
+              {/* Comments Section */}
+              <MarketComments marketId={market.id} />
             </div>
 
             {/* Order Form Sidebar */}
