@@ -231,32 +231,32 @@ const MarketDetail = () => {
             Voltar aos Mercados
           </Link>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
             {/* Market Info */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2 space-y-4 sm:space-y-6">
               {/* Header */}
-              <div className="bg-card rounded-2xl border border-border p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <Badge variant="outline">{market.category}</Badge>
+              <div className="bg-card rounded-xl sm:rounded-2xl border border-border p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge variant="outline" className="text-xs">{market.category}</Badge>
                     <Badge
                       variant={market.status === "open" ? "default" : "secondary"}
-                      className={
+                      className={`text-xs ${
                         market.status === "open"
                           ? "bg-primary/10 text-primary border-primary/20"
                           : ""
-                      }
+                      }`}
                     >
                       {STATUS_LABELS[market.status]}
                     </Badge>
                     {market.status === "resolved" && (
                       <Badge
                         variant={market.outcome ? "default" : "destructive"}
-                        className={
+                        className={`text-xs ${
                           market.outcome
                             ? "bg-primary text-primary-foreground"
                             : "bg-destructive text-destructive-foreground"
-                        }
+                        }`}
                       >
                         Resultado: {market.outcome ? "SIM" : "NÃO"}
                       </Badge>
@@ -271,39 +271,39 @@ const MarketDetail = () => {
                   )}
                 </div>
 
-                <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-3 sm:mb-4">
                   {market.title}
                 </h1>
 
                 {market.description && (
-                  <p className="text-muted-foreground mb-6">
+                  <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6">
                     {market.description}
                   </p>
                 )}
 
                 {/* Probability Display */}
-                <div className="bg-muted/50 rounded-xl p-6">
-                  <div className="flex justify-between items-center mb-4">
+                <div className="bg-muted/50 rounded-lg sm:rounded-xl p-4 sm:p-6">
+                  <div className="flex justify-between items-center mb-3 sm:mb-4">
                     <div className="text-center">
-                      <div className="flex items-center gap-2 text-primary mb-1">
-                        <TrendingUp className="w-5 h-5" />
-                        <span className="text-3xl font-bold">
+                      <div className="flex items-center gap-1.5 sm:gap-2 text-primary mb-1">
+                        <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <span className="text-2xl sm:text-3xl font-bold">
                           {yesPercentage.toFixed(0)}%
                         </span>
                       </div>
-                      <span className="text-sm text-muted-foreground">SIM</span>
+                      <span className="text-xs sm:text-sm text-muted-foreground">SIM</span>
                     </div>
                     <div className="text-center">
-                      <div className="flex items-center gap-2 text-destructive mb-1">
-                        <span className="text-3xl font-bold">
+                      <div className="flex items-center gap-1.5 sm:gap-2 text-destructive mb-1">
+                        <span className="text-2xl sm:text-3xl font-bold">
                           {noPercentage.toFixed(0)}%
                         </span>
-                        <TrendingDown className="w-5 h-5" />
+                        <TrendingDown className="w-4 h-4 sm:w-5 sm:h-5" />
                       </div>
-                      <span className="text-sm text-muted-foreground">NÃO</span>
+                      <span className="text-xs sm:text-sm text-muted-foreground">NÃO</span>
                     </div>
                   </div>
-                  <div className="h-4 bg-muted rounded-full overflow-hidden">
+                  <div className="h-3 sm:h-4 bg-muted rounded-full overflow-hidden">
                     <div
                       className="h-full bg-gradient-to-r from-primary to-primary/70 rounded-full transition-all duration-500"
                       style={{ width: `${yesPercentage}%` }}
@@ -312,30 +312,30 @@ const MarketDetail = () => {
                 </div>
 
                 {/* Meta Info */}
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6 pt-6 border-t border-border">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Clock className="w-5 h-5" />
-                    <div>
-                      <p className="text-xs">Encerra em</p>
-                      <p className="text-sm font-medium text-foreground">
+                <div className="grid grid-cols-3 gap-2 sm:gap-4 mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-border">
+                  <div className="flex flex-col sm:flex-row items-center sm:items-start gap-1 sm:gap-2 text-muted-foreground text-center sm:text-left">
+                    <Clock className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                    <div className="min-w-0">
+                      <p className="text-[10px] sm:text-xs">Encerra em</p>
+                      <p className="text-xs sm:text-sm font-medium text-foreground truncate">
                         {formatDate(market.end_date)}
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <DollarSign className="w-5 h-5" />
-                    <div>
-                      <p className="text-xs">Volume Total</p>
-                      <p className="text-sm font-medium text-foreground">
+                  <div className="flex flex-col sm:flex-row items-center sm:items-start gap-1 sm:gap-2 text-muted-foreground text-center sm:text-left">
+                    <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                    <div className="min-w-0">
+                      <p className="text-[10px] sm:text-xs">Volume</p>
+                      <p className="text-xs sm:text-sm font-medium text-foreground truncate">
                         {formatCurrency(market.total_volume)}
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Users className="w-5 h-5" />
-                    <div>
-                      <p className="text-xs">Ordens</p>
-                      <p className="text-sm font-medium text-foreground">
+                  <div className="flex flex-col sm:flex-row items-center sm:items-start gap-1 sm:gap-2 text-muted-foreground text-center sm:text-left">
+                    <Users className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                    <div className="min-w-0">
+                      <p className="text-[10px] sm:text-xs">Ordens</p>
+                      <p className="text-xs sm:text-sm font-medium text-foreground">
                         {orders.length}
                       </p>
                     </div>
@@ -344,33 +344,33 @@ const MarketDetail = () => {
               </div>
 
               {/* Recent Orders */}
-              <div className="bg-card rounded-2xl border border-border p-6">
-                <h2 className="text-lg font-semibold text-foreground mb-4">
+              <div className="bg-card rounded-xl sm:rounded-2xl border border-border p-4 sm:p-6">
+                <h2 className="text-base sm:text-lg font-semibold text-foreground mb-3 sm:mb-4">
                   Ordens Recentes
                 </h2>
                 {orders.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-8">
+                  <p className="text-sm text-muted-foreground text-center py-6 sm:py-8">
                     Nenhuma ordem realizada ainda.
                   </p>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     {orders.slice(0, 10).map((order) => (
                       <div
                         key={order.id}
-                        className="flex items-center justify-between py-3 border-b border-border last:border-0"
+                        className="flex items-center justify-between py-2 sm:py-3 border-b border-border last:border-0"
                       >
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 sm:gap-3">
                           <Badge
                             variant={order.side === "yes" ? "default" : "destructive"}
-                            className={
+                            className={`text-xs ${
                               order.side === "yes"
                                 ? "bg-primary/10 text-primary"
                                 : "bg-destructive/10 text-destructive"
-                            }
+                            }`}
                           >
                             {order.side === "yes" ? "SIM" : "NÃO"}
                           </Badge>
-                          <span className="text-sm text-muted-foreground">
+                          <span className="text-xs sm:text-sm text-muted-foreground">
                             {formatCurrency(order.amount)} @{" "}
                             {(order.price * 100).toFixed(0)}%
                           </span>
@@ -378,13 +378,13 @@ const MarketDetail = () => {
                         <div className="text-right">
                           <Badge
                             variant="outline"
-                            className={
+                            className={`text-xs ${
                               order.status === "filled"
                                 ? "text-primary"
                                 : order.status === "cancelled"
                                 ? "text-destructive"
                                 : ""
-                            }
+                            }`}
                           >
                             {order.status === "pending"
                               ? "Pendente"
@@ -401,8 +401,8 @@ const MarketDetail = () => {
             </div>
 
             {/* Order Form Sidebar */}
-            <div className="lg:col-span-1">
-              <div className="sticky top-24">
+            <div className="lg:col-span-1 order-first lg:order-last">
+              <div className="lg:sticky lg:top-24">
                 <OrderForm
                   marketId={market.id}
                   yesProbability={market.yes_probability}

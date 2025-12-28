@@ -165,37 +165,37 @@ const OrderForm = ({
   }
 
   return (
-    <div className="bg-card rounded-2xl border border-border p-6">
-      <h3 className="text-lg font-semibold text-foreground mb-6">
+    <div className="bg-card rounded-xl sm:rounded-2xl border border-border p-4 sm:p-6">
+      <h3 className="text-base sm:text-lg font-semibold text-foreground mb-4 sm:mb-6">
         Fazer Aposta
       </h3>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
         {/* Side Selection */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3">
           <button
             type="button"
             onClick={() => setSelectedSide("yes")}
-            className={`flex flex-col items-center p-4 rounded-xl border-2 transition-all ${
+            className={`flex flex-col items-center p-3 sm:p-4 rounded-lg sm:rounded-xl border-2 transition-all ${
               selectedSide === "yes"
                 ? "border-primary bg-primary/10"
                 : "border-border hover:border-primary/50"
             }`}
           >
             <TrendingUp
-              className={`w-6 h-6 mb-2 ${
+              className={`w-5 h-5 sm:w-6 sm:h-6 mb-1.5 sm:mb-2 ${
                 selectedSide === "yes" ? "text-primary" : "text-muted-foreground"
               }`}
             />
             <span
-              className={`text-sm font-medium ${
+              className={`text-xs sm:text-sm font-medium ${
                 selectedSide === "yes" ? "text-primary" : "text-muted-foreground"
               }`}
             >
               SIM
             </span>
             <span
-              className={`text-2xl font-bold ${
+              className={`text-xl sm:text-2xl font-bold ${
                 selectedSide === "yes" ? "text-primary" : "text-foreground"
               }`}
             >
@@ -206,26 +206,26 @@ const OrderForm = ({
           <button
             type="button"
             onClick={() => setSelectedSide("no")}
-            className={`flex flex-col items-center p-4 rounded-xl border-2 transition-all ${
+            className={`flex flex-col items-center p-3 sm:p-4 rounded-lg sm:rounded-xl border-2 transition-all ${
               selectedSide === "no"
                 ? "border-destructive bg-destructive/10"
                 : "border-border hover:border-destructive/50"
             }`}
           >
             <TrendingDown
-              className={`w-6 h-6 mb-2 ${
+              className={`w-5 h-5 sm:w-6 sm:h-6 mb-1.5 sm:mb-2 ${
                 selectedSide === "no" ? "text-destructive" : "text-muted-foreground"
               }`}
             />
             <span
-              className={`text-sm font-medium ${
+              className={`text-xs sm:text-sm font-medium ${
                 selectedSide === "no" ? "text-destructive" : "text-muted-foreground"
               }`}
             >
               NÃO
             </span>
             <span
-              className={`text-2xl font-bold ${
+              className={`text-xl sm:text-2xl font-bold ${
                 selectedSide === "no" ? "text-destructive" : "text-foreground"
               }`}
             >
@@ -236,18 +236,18 @@ const OrderForm = ({
 
         {/* Balance Display */}
         {balance !== null && (
-          <div className="flex items-center justify-between p-3 bg-primary/10 rounded-xl border border-primary/20">
-            <div className="flex items-center gap-2">
-              <Wallet className="w-4 h-4 text-primary" />
-              <span className="text-sm text-muted-foreground">Seu saldo:</span>
+          <div className="flex items-center justify-between p-2.5 sm:p-3 bg-primary/10 rounded-lg sm:rounded-xl border border-primary/20">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <Wallet className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
+              <span className="text-xs sm:text-sm text-muted-foreground">Seu saldo:</span>
             </div>
-            <span className="font-bold text-primary">R$ {balance.toFixed(2)}</span>
+            <span className="font-bold text-sm sm:text-base text-primary">R$ {balance.toFixed(2)}</span>
           </div>
         )}
 
         {/* Amount Input */}
-        <div className="space-y-2">
-          <Label htmlFor="amount">Valor da Aposta (R$)</Label>
+        <div className="space-y-1.5 sm:space-y-2">
+          <Label htmlFor="amount" className="text-sm">Valor da Aposta (R$)</Label>
           <Input
             id="amount"
             type="number"
@@ -257,7 +257,7 @@ const OrderForm = ({
             placeholder="0.00"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="text-lg"
+            className="text-base sm:text-lg"
           />
           {amount && parseFloat(amount) > (balance || 0) && (
             <p className="text-xs text-destructive">Saldo insuficiente</p>
@@ -266,20 +266,20 @@ const OrderForm = ({
 
         {/* Potential Return */}
         {amount && parseFloat(amount) > 0 && (
-          <div className="bg-muted/50 rounded-xl p-4 space-y-2">
-            <div className="flex justify-between text-sm">
+          <div className="bg-muted/50 rounded-lg sm:rounded-xl p-3 sm:p-4 space-y-1.5 sm:space-y-2">
+            <div className="flex justify-between text-xs sm:text-sm">
               <span className="text-muted-foreground">Preço atual</span>
               <span className="font-medium text-foreground">
                 {(currentPrice * 100).toFixed(0)}%
               </span>
             </div>
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between text-xs sm:text-sm">
               <span className="text-muted-foreground">Retorno potencial</span>
               <span className="font-medium text-foreground">
                 R$ {potentialReturn.toFixed(2)}
               </span>
             </div>
-            <div className="flex justify-between text-sm pt-2 border-t border-border">
+            <div className="flex justify-between text-xs sm:text-sm pt-1.5 sm:pt-2 border-t border-border">
               <span className="text-muted-foreground">Lucro potencial</span>
               <span className="font-bold text-primary">
                 +R$ {profit.toFixed(2)}
@@ -292,7 +292,7 @@ const OrderForm = ({
         <Button
           type="submit"
           className="w-full"
-          size="lg"
+          size="default"
           disabled={loading || !amount || parseFloat(amount) <= 0}
         >
           {loading ? (
@@ -309,7 +309,7 @@ const OrderForm = ({
           )}
         </Button>
 
-        <p className="text-xs text-muted-foreground text-center">
+        <p className="text-[10px] sm:text-xs text-muted-foreground text-center">
           Ao apostar, você concorda com os termos de uso da plataforma.
         </p>
       </form>
