@@ -82,6 +82,10 @@ const ReferralShare = () => {
     window.open(whatsappUrl, "_blank");
   };
 
+  if (!user) {
+    return null;
+  }
+
   if (loading) {
     return (
       <Card>
@@ -95,6 +99,17 @@ const ReferralShare = () => {
     );
   }
 
+  if (!referralCode) {
+    return (
+      <Card>
+        <CardContent className="p-6">
+          <p className="text-sm text-muted-foreground text-center">
+            Carregando código de indicação...
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
   return (
     <Card>
       <CardHeader className="p-4 sm:p-6">
@@ -121,14 +136,12 @@ const ReferralShare = () => {
         </div>
 
         {/* Referral Code */}
-        {referralCode && (
-          <div className="p-3 rounded-lg border border-dashed border-primary/50 bg-primary/5 text-center">
-            <p className="text-xs text-muted-foreground mb-1">Seu código</p>
-            <p className="text-lg font-mono font-bold text-primary tracking-widest">
-              {referralCode}
-            </p>
-          </div>
-        )}
+        <div className="p-3 rounded-lg border border-dashed border-primary/50 bg-primary/5 text-center">
+          <p className="text-xs text-muted-foreground mb-1">Seu código</p>
+          <p className="text-lg font-mono font-bold text-primary tracking-widest">
+            {referralCode}
+          </p>
+        </div>
 
         {/* Share Buttons */}
         <div className="flex gap-2">
