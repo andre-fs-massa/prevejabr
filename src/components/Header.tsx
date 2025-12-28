@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Menu, X, LogOut, User } from "lucide-react";
-import { useState } from "react";
+import { TrendingUp, Menu, X, LogOut, User, Wallet } from "lucide-react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +13,48 @@ import {
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [balance, setBalance] = useState<number | null>(null);
   const { user, signOut } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      const fetchBalance = async () => {
+        const { data } = await supabase
+          .from('wallets')
+          .select('balance')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        
+        if (data) {
+          setBalance(Number(data.balance));
+        }
+      };
+      fetchBalance();
+
+      // Realtime subscription for balance updates
+      const channel = supabase
+        .channel('wallet-balance')
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'wallets',
+            filter: `user_id=eq.${user.id}`,
+          },
+          (payload) => {
+            setBalance(Number(payload.new.balance));
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    } else {
+      setBalance(null);
+    }
+  }, [user]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -48,20 +90,30 @@ const Header = () => {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
             {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="gap-2">
-                    <User className="w-4 h-4" />
-                    <span className="max-w-32 truncate">{user.email}</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={handleSignOut} className="gap-2 cursor-pointer">
-                    <LogOut className="w-4 h-4" />
-                    Sair
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <>
+                {balance !== null && (
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 rounded-lg border border-primary/20">
+                    <Wallet className="w-4 h-4 text-primary" />
+                    <span className="font-semibold text-primary">
+                      R$ {balance.toFixed(2)}
+                    </span>
+                  </div>
+                )}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="gap-2">
+                      <User className="w-4 h-4" />
+                      <span className="max-w-32 truncate">{user.email}</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={handleSignOut} className="gap-2 cursor-pointer">
+                      <LogOut className="w-4 h-4" />
+                      Sair
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
             ) : (
               <>
                 <Button variant="ghost" asChild>
@@ -99,6 +151,14 @@ const Header = () => {
               <div className="flex flex-col gap-2 pt-4 border-t border-border">
                 {user ? (
                   <>
+                    {balance !== null && (
+                      <div className="flex items-center justify-center gap-2 px-4 py-2 bg-primary/10 rounded-lg border border-primary/20 mx-4">
+                        <Wallet className="w-4 h-4 text-primary" />
+                        <span className="font-semibold text-primary">
+                          R$ {balance.toFixed(2)}
+                        </span>
+                      </div>
+                    )}
                     <p className="text-sm text-muted-foreground truncate px-4 py-2">
                       {user.email}
                     </p>
