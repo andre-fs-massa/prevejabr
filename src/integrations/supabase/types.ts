@@ -14,7 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      markets: {
+        Row: {
+          category: string
+          created_at: string
+          created_by: string
+          description: string | null
+          end_date: string
+          id: string
+          outcome: boolean | null
+          status: Database["public"]["Enums"]["market_status"]
+          title: string
+          total_volume: number
+          updated_at: string
+          yes_probability: number
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          created_by: string
+          description?: string | null
+          end_date: string
+          id?: string
+          outcome?: boolean | null
+          status?: Database["public"]["Enums"]["market_status"]
+          title: string
+          total_volume?: number
+          updated_at?: string
+          yes_probability?: number
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          end_date?: string
+          id?: string
+          outcome?: boolean | null
+          status?: Database["public"]["Enums"]["market_status"]
+          title?: string
+          total_volume?: number
+          updated_at?: string
+          yes_probability?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +67,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      market_status: "open" | "closed" | "resolved"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +194,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      market_status: ["open", "closed", "resolved"],
+    },
   },
 } as const
