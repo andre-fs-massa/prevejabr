@@ -90,6 +90,11 @@ const MarketDetail = () => {
     }
   };
 
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // Initial data fetch
   useEffect(() => {
     if (id) {
