@@ -34,9 +34,9 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            <a href="#mercados" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
+            <Link to="/markets" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
               Mercados
-            </a>
+            </Link>
             <a href="#como-funciona" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
               Como Funciona
             </a>
@@ -87,9 +87,9 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-border animate-fade-in">
             <nav className="flex flex-col gap-4">
-              <a href="#mercados" className="text-muted-foreground hover:text-foreground transition-colors font-medium py-2">
+              <Link to="/markets" className="text-muted-foreground hover:text-foreground transition-colors font-medium py-2">
                 Mercados
-              </a>
+              </Link>
               <a href="#como-funciona" className="text-muted-foreground hover:text-foreground transition-colors font-medium py-2">
                 Como Funciona
               </a>
