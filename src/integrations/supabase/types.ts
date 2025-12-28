@@ -59,6 +59,53 @@ export type Database = {
         }
         Relationships: []
       }
+      orders: {
+        Row: {
+          amount: number
+          created_at: string
+          filled_at: string | null
+          id: string
+          market_id: string
+          price: number
+          side: Database["public"]["Enums"]["order_side"]
+          status: Database["public"]["Enums"]["order_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          filled_at?: string | null
+          id?: string
+          market_id: string
+          price: number
+          side: Database["public"]["Enums"]["order_side"]
+          status?: Database["public"]["Enums"]["order_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          filled_at?: string | null
+          id?: string
+          market_id?: string
+          price?: number
+          side?: Database["public"]["Enums"]["order_side"]
+          status?: Database["public"]["Enums"]["order_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -68,6 +115,8 @@ export type Database = {
     }
     Enums: {
       market_status: "open" | "closed" | "resolved"
+      order_side: "yes" | "no"
+      order_status: "pending" | "filled" | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -196,6 +245,8 @@ export const Constants = {
   public: {
     Enums: {
       market_status: ["open", "closed", "resolved"],
+      order_side: ["yes", "no"],
+      order_status: ["pending", "filled", "cancelled"],
     },
   },
 } as const
