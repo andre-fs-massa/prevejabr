@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import CreateMarketDialog from "@/components/CreateMarketDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -50,6 +52,7 @@ const Markets = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const [selectedStatus, setSelectedStatus] = useState("all");
+  const { user } = useAuth();
 
   useEffect(() => {
     fetchMarkets();
@@ -106,14 +109,17 @@ const Markets = () => {
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
           {/* Hero Section */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Mercados de Previsão
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Explore todos os mercados disponíveis e faça suas previsões sobre
-              eventos futuros.
-            </p>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-12">
+            <div>
+              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2">
+                Mercados de Previsão
+              </h1>
+              <p className="text-lg text-muted-foreground max-w-2xl">
+                Explore todos os mercados disponíveis e faça suas previsões sobre
+                eventos futuros.
+              </p>
+            </div>
+            <CreateMarketDialog onMarketCreated={fetchMarkets} />
           </div>
 
           {/* Filters */}
