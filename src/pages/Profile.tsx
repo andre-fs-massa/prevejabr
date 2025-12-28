@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ReferralShare from "@/components/ReferralShare";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Wallet, TrendingUp, TrendingDown, Clock, Trophy, XCircle, PlusCircle } from "lucide-react";
@@ -229,6 +230,11 @@ const Profile = () => {
               </div>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Referral Share */}
+        <div className="mb-6 sm:mb-8">
+          <ReferralShare />
         </div>
 
         {/* Created Markets */}

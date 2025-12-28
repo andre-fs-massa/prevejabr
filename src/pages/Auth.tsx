@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { TrendingUp, Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { TrendingUp, Mail, Lock, Eye, EyeOff, ArrowLeft, Gift } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
 
@@ -12,7 +13,10 @@ const emailSchema = z.string().email('E-mail inválido');
 const passwordSchema = z.string().min(6, 'A senha deve ter pelo menos 6 caracteres');
 
 const Auth = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [searchParams] = useSearchParams();
+  const referralCode = searchParams.get('ref');
+  
+  const [isLogin, setIsLogin] = useState(!referralCode);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -24,11 +28,44 @@ const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  // Store referral code in localStorage
+  useEffect(() => {
+    if (referralCode) {
+      localStorage.setItem('referral_code', referralCode);
+    }
+  }, [referralCode]);
+
   useEffect(() => {
     if (!loading && user) {
+      // Process referral after signup
+      const storedCode = localStorage.getItem('referral_code');
+      if (storedCode) {
+        processReferral(storedCode, user.id);
+      }
       navigate('/');
     }
   }, [user, loading, navigate]);
+
+  const processReferral = async (code: string, userId: string) => {
+    try {
+      const { data, error } = await supabase.rpc('process_referral', {
+        referral_code: code,
+        new_user_id: userId
+      });
+      
+      if (data === true) {
+        toast({
+          title: 'Bônus de indicação!',
+          description: 'Você foi indicado por um amigo. Bem-vindo!',
+        });
+      }
+      
+      // Clear the stored code after processing
+      localStorage.removeItem('referral_code');
+    } catch (error) {
+      console.error('Error processing referral:', error);
+    }
+  };
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string; confirmPassword?: string } = {};
@@ -145,11 +182,22 @@ const Auth = () => {
           <h1 className="text-3xl font-bold text-foreground mb-2">
             {isLogin ? 'Bem-vindo de volta!' : 'Crie sua conta'}
           </h1>
-          <p className="text-muted-foreground mb-8">
+          <p className="text-muted-foreground mb-6">
             {isLogin
               ? 'Entre com suas credenciais para continuar.'
               : 'Preencha os dados abaixo para começar.'}
           </p>
+
+          {/* Referral Badge */}
+          {referralCode && !isLogin && (
+            <div className="mb-6 p-3 rounded-lg border border-dashed border-primary/50 bg-primary/5 flex items-center gap-2">
+              <Gift className="h-5 w-5 text-primary flex-shrink-0" />
+              <div>
+                <p className="text-sm font-medium text-foreground">Você foi indicado!</p>
+                <p className="text-xs text-muted-foreground">Seu amigo ganhará R$ 25 após seu cadastro</p>
+              </div>
+            </div>
+          )}
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
