@@ -14,66 +14,66 @@ const Hero = () => {
       {/* Grid pattern overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
-      <div className="container relative mx-auto px-4 pt-32 pb-20 md:pt-40 md:pb-32">
+      <div className="container relative mx-auto px-4 pt-24 pb-16 sm:pt-32 sm:pb-20 md:pt-40 md:pb-32">
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 mb-8 animate-fade-in">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 mb-6 sm:mb-8 animate-fade-in">
             <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
-            <span className="text-sm font-medium text-primary-foreground/90">
+            <span className="text-xs sm:text-sm font-medium text-primary-foreground/90">
               Mercado de previsões 100% brasileiro
             </span>
           </div>
 
           {/* Headline */}
-          <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold text-primary-foreground leading-tight mb-6 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+          <h1 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-primary-foreground leading-tight mb-4 sm:mb-6 animate-fade-in px-2" style={{ animationDelay: "0.1s" }}>
             Transforme sua opinião em{" "}
             <span className="text-gradient">oportunidade</span>
           </h1>
 
           {/* Subheadline */}
-          <p className="text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-10 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+          <p className="text-base sm:text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-8 sm:mb-10 px-2 animate-fade-in" style={{ animationDelay: "0.2s" }}>
             Compre e venda contratos sobre eventos reais. Eleições, economia, esportes e muito mais. 
             O futuro está nas suas mãos.
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-fade-in" style={{ animationDelay: "0.3s" }}>
-            <Button variant="hero" size="xl">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-12 sm:mb-16 px-4 animate-fade-in" style={{ animationDelay: "0.3s" }}>
+            <Button variant="hero" size="lg" className="w-full sm:w-auto">
               Começar Agora
               <ArrowRight className="w-5 h-5" />
             </Button>
-            <Button variant="heroOutline" size="xl">
+            <Button variant="heroOutline" size="lg" className="w-full sm:w-auto">
               Ver Mercados
             </Button>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto animate-fade-in" style={{ animationDelay: "0.4s" }}>
-            <div className="flex items-center justify-center gap-3 p-4 rounded-2xl bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10">
-              <div className="w-12 h-12 rounded-xl bg-secondary/20 flex items-center justify-center">
-                <TrendingUp className="w-6 h-6 text-secondary" />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 max-w-3xl mx-auto animate-fade-in" style={{ animationDelay: "0.4s" }}>
+            <div className="flex items-center justify-center gap-3 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-secondary/20 flex items-center justify-center flex-shrink-0">
+                <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-secondary" />
               </div>
               <div className="text-left">
-                <p className="text-2xl font-bold text-primary-foreground">R$ 2.5M+</p>
-                <p className="text-sm text-primary-foreground/60">Volume negociado</p>
+                <p className="text-xl sm:text-2xl font-bold text-primary-foreground">R$ 2.5M+</p>
+                <p className="text-xs sm:text-sm text-primary-foreground/60">Volume negociado</p>
               </div>
             </div>
-            <div className="flex items-center justify-center gap-3 p-4 rounded-2xl bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10">
-              <div className="w-12 h-12 rounded-xl bg-secondary/20 flex items-center justify-center">
-                <Users className="w-6 h-6 text-secondary" />
+            <div className="flex items-center justify-center gap-3 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-secondary/20 flex items-center justify-center flex-shrink-0">
+                <Users className="w-5 h-5 sm:w-6 sm:h-6 text-secondary" />
               </div>
               <div className="text-left">
-                <p className="text-2xl font-bold text-primary-foreground">50K+</p>
-                <p className="text-sm text-primary-foreground/60">Usuários ativos</p>
+                <p className="text-xl sm:text-2xl font-bold text-primary-foreground">50K+</p>
+                <p className="text-xs sm:text-sm text-primary-foreground/60">Usuários ativos</p>
               </div>
             </div>
-            <div className="flex items-center justify-center gap-3 p-4 rounded-2xl bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10">
-              <div className="w-12 h-12 rounded-xl bg-secondary/20 flex items-center justify-center">
-                <Shield className="w-6 h-6 text-secondary" />
+            <div className="flex items-center justify-center gap-3 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-secondary/20 flex items-center justify-center flex-shrink-0">
+                <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-secondary" />
               </div>
               <div className="text-left">
-                <p className="text-2xl font-bold text-primary-foreground">100%</p>
-                <p className="text-sm text-primary-foreground/60">Seguro e regulado</p>
+                <p className="text-xl sm:text-2xl font-bold text-primary-foreground">100%</p>
+                <p className="text-xs sm:text-sm text-primary-foreground/60">Seguro e regulado</p>
               </div>
             </div>
           </div>

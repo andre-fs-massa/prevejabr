@@ -146,62 +146,62 @@ const Profile = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="container mx-auto px-4 pt-24 pb-16">
-        <h1 className="text-3xl font-bold text-foreground mb-8">Meu Perfil</h1>
+      <main className="container mx-auto px-4 pt-20 sm:pt-24 pb-12 sm:pb-16">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-6 sm:mb-8">Meu Perfil</h1>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2 p-3 sm:p-6">
+              <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">
                 Saldo Atual
               </CardTitle>
-              <Wallet className="h-4 w-4 text-primary" />
+              <Wallet className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-primary">
+            <CardContent className="p-3 sm:p-6 pt-0">
+              <div className="text-lg sm:text-2xl font-bold text-primary">
                 R$ {balance?.toFixed(2) || "0.00"}
               </div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2 p-3 sm:p-6">
+              <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">
                 Total Apostado
               </CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
+            <CardContent className="p-3 sm:p-6 pt-0">
+              <div className="text-lg sm:text-2xl font-bold">
                 R$ {stats.totalBet.toFixed(2)}
               </div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Lucro Confirmado
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2 p-3 sm:p-6">
+              <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">
+                Lucro
               </CardTitle>
-              <Trophy className="h-4 w-4 text-green-500" />
+              <Trophy className="h-3 w-3 sm:h-4 sm:w-4 text-green-500" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-green-500">
+            <CardContent className="p-3 sm:p-6 pt-0">
+              <div className="text-lg sm:text-2xl font-bold text-green-500">
                 +R$ {stats.confirmedWins.toFixed(2)}
               </div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Perdas Confirmadas
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2 p-3 sm:p-6">
+              <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">
+                Perdas
               </CardTitle>
-              <XCircle className="h-4 w-4 text-destructive" />
+              <XCircle className="h-3 w-3 sm:h-4 sm:w-4 text-destructive" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-destructive">
+            <CardContent className="p-3 sm:p-6 pt-0">
+              <div className="text-lg sm:text-2xl font-bold text-destructive">
                 -R$ {stats.confirmedLosses.toFixed(2)}
               </div>
             </CardContent>
@@ -210,19 +210,19 @@ const Profile = () => {
 
         {/* Orders History */}
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Clock className="h-5 w-5" />
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <Clock className="h-4 w-4 sm:h-5 sm:w-5" />
               Histórico de Apostas
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 sm:p-6 pt-0">
             {orders.length === 0 ? (
-              <p className="text-muted-foreground text-center py-8">
+              <p className="text-sm text-muted-foreground text-center py-6 sm:py-8">
                 Você ainda não fez nenhuma aposta.
               </p>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {orders.map((order) => {
                   const potentialReturn = Number(order.amount) / Number(order.price);
                   const isWinner =
@@ -238,49 +238,54 @@ const Profile = () => {
                   return (
                     <div
                       key={order.id}
-                      className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-border hover:bg-muted/50 transition-colors gap-4"
+                      className="flex flex-col p-3 sm:p-4 rounded-lg sm:rounded-xl border border-border hover:bg-muted/50 transition-colors gap-3"
                     >
-                      <div className="flex-1">
-                        <p className="font-medium text-foreground mb-1">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-foreground text-sm sm:text-base mb-1 line-clamp-2">
                           {order.market.title}
                         </p>
-                        <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+                        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-muted-foreground">
                           <Badge
                             variant={order.side === "yes" ? "default" : "destructive"}
-                            className="text-xs"
+                            className="text-[10px] sm:text-xs"
                           >
                             {order.side === "yes" ? "SIM" : "NÃO"}
                           </Badge>
                           <span>R$ {Number(order.amount).toFixed(2)}</span>
-                          <span>•</span>
-                          <span>
+                          <span className="hidden sm:inline">•</span>
+                          <span className="hidden sm:inline">
                             {format(new Date(order.created_at), "dd MMM yyyy, HH:mm", {
+                              locale: ptBR,
+                            })}
+                          </span>
+                          <span className="sm:hidden">
+                            {format(new Date(order.created_at), "dd/MM/yy", {
                               locale: ptBR,
                             })}
                           </span>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-4">
-                        <div className="text-right">
-                          <p className="text-sm text-muted-foreground">Retorno</p>
-                          <p className="font-semibold">R$ {potentialReturn.toFixed(2)}</p>
+                      <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 pt-2 border-t border-border sm:border-0 sm:pt-0">
+                        <div className="text-left sm:text-right">
+                          <p className="text-xs text-muted-foreground">Retorno</p>
+                          <p className="font-semibold text-sm sm:text-base">R$ {potentialReturn.toFixed(2)}</p>
                         </div>
 
                         {order.market.status === "resolved" ? (
                           isWinner ? (
-                            <Badge className="bg-green-500/10 text-green-500 border-green-500/20">
+                            <Badge className="bg-green-500/10 text-green-500 border-green-500/20 text-xs">
                               <Trophy className="w-3 h-3 mr-1" />
                               Ganhou
                             </Badge>
                           ) : (
-                            <Badge variant="destructive" className="bg-destructive/10">
+                            <Badge variant="destructive" className="bg-destructive/10 text-xs">
                               <XCircle className="w-3 h-3 mr-1" />
                               Perdeu
                             </Badge>
                           )
                         ) : (
-                          <Badge variant="outline" className="text-muted-foreground">
+                          <Badge variant="outline" className="text-muted-foreground text-xs">
                             <Clock className="w-3 h-3 mr-1" />
                             Pendente
                           </Badge>

@@ -106,15 +106,15 @@ const Markets = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="pt-24 pb-16">
+      <main className="pt-20 sm:pt-24 pb-12 sm:pb-16">
         <div className="container mx-auto px-4">
           {/* Hero Section */}
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-12">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 sm:mb-12">
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-foreground mb-2">
                 Mercados de Previsão
               </h1>
-              <p className="text-lg text-muted-foreground max-w-2xl">
+              <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl">
                 Explore todos os mercados disponíveis e faça suas previsões sobre
                 eventos futuros.
               </p>
@@ -123,45 +123,47 @@ const Markets = () => {
           </div>
 
           {/* Filters */}
-          <div className="bg-card rounded-2xl shadow-card border border-border p-6 mb-8">
-            <div className="flex flex-col md:flex-row gap-4">
+          <div className="bg-card rounded-xl sm:rounded-2xl shadow-card border border-border p-4 sm:p-6 mb-6 sm:mb-8">
+            <div className="flex flex-col gap-3 sm:gap-4">
               {/* Search */}
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
                 <Input
                   placeholder="Buscar mercados..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="pl-9 sm:pl-10 text-sm sm:text-base"
                 />
               </div>
 
-              {/* Category Filter */}
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="w-full md:w-48">
-                  <SelectValue placeholder="Categoria" />
-                </SelectTrigger>
-                <SelectContent>
-                  {CATEGORIES.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="grid grid-cols-2 md:flex md:flex-row gap-2 sm:gap-4">
+                {/* Category Filter */}
+                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                  <SelectTrigger className="w-full md:w-48">
+                    <SelectValue placeholder="Categoria" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {CATEGORIES.map((category) => (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
-              {/* Status Filter */}
-              <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-                <SelectTrigger className="w-full md:w-40">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todos</SelectItem>
-                  <SelectItem value="open">Aberto</SelectItem>
-                  <SelectItem value="closed">Fechado</SelectItem>
-                  <SelectItem value="resolved">Resolvido</SelectItem>
-                </SelectContent>
-              </Select>
+                {/* Status Filter */}
+                <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+                  <SelectTrigger className="w-full md:w-40">
+                    <SelectValue placeholder="Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todos</SelectItem>
+                    <SelectItem value="open">Aberto</SelectItem>
+                    <SelectItem value="closed">Fechado</SelectItem>
+                    <SelectItem value="resolved">Resolvido</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             {/* Active Filters */}
@@ -209,8 +211,8 @@ const Markets = () => {
           </div>
 
           {/* Results Count */}
-          <div className="mb-6">
-            <p className="text-muted-foreground">
+          <div className="mb-4 sm:mb-6">
+            <p className="text-sm sm:text-base text-muted-foreground">
               {filteredMarkets.length}{" "}
               {filteredMarkets.length === 1 ? "mercado encontrado" : "mercados encontrados"}
             </p>
@@ -218,11 +220,11 @@ const Markets = () => {
 
           {/* Markets Grid */}
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {[...Array(6)].map((_, i) => (
                 <div
                   key={i}
-                  className="bg-card rounded-2xl border border-border p-6 animate-pulse"
+                  className="bg-card rounded-xl sm:rounded-2xl border border-border p-4 sm:p-6 animate-pulse"
                 >
                   <div className="h-4 bg-muted rounded w-20 mb-4" />
                   <div className="h-6 bg-muted rounded w-full mb-2" />
@@ -236,18 +238,19 @@ const Markets = () => {
               ))}
             </div>
           ) : filteredMarkets.length === 0 ? (
-            <div className="text-center py-16">
-              <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-6">
-                <Search className="w-10 h-10 text-muted-foreground" />
+            <div className="text-center py-12 sm:py-16">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <Search className="w-8 h-8 sm:w-10 sm:h-10 text-muted-foreground" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-2">
+              <h3 className="text-lg sm:text-xl font-semibold text-foreground mb-2">
                 Nenhum mercado encontrado
               </h3>
-              <p className="text-muted-foreground mb-6">
+              <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6">
                 Tente ajustar os filtros ou buscar por outros termos.
               </p>
               <Button
                 variant="outline"
+                size="sm"
                 onClick={() => {
                   setSearchQuery("");
                   setSelectedCategory("Todos");
@@ -258,15 +261,15 @@ const Markets = () => {
               </Button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {filteredMarkets.map((market) => (
                 <Link to={`/markets/${market.id}`} key={market.id}>
                 <article
-                  className="bg-card rounded-2xl border border-border p-6 hover:shadow-card transition-all duration-300 group cursor-pointer"
+                  className="bg-card rounded-xl sm:rounded-2xl border border-border p-4 sm:p-6 hover:shadow-card transition-all duration-300 group cursor-pointer"
                 >
                   {/* Category & Status */}
-                  <div className="flex items-center justify-between mb-4">
-                    <Badge variant="outline" className="text-xs">
+                  <div className="flex items-center justify-between mb-3 sm:mb-4">
+                    <Badge variant="outline" className="text-[10px] sm:text-xs">
                       {market.category}
                     </Badge>
                     <Badge
@@ -277,39 +280,39 @@ const Markets = () => {
                           ? "secondary"
                           : "outline"
                       }
-                      className={
+                      className={`text-[10px] sm:text-xs ${
                         market.status === "open"
                           ? "bg-primary/10 text-primary border-primary/20"
                           : ""
-                      }
+                      }`}
                     >
                       {STATUS_LABELS[market.status]}
                     </Badge>
                   </div>
 
                   {/* Title & Description */}
-                  <h3 className="text-lg font-semibold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                  <h3 className="text-base sm:text-lg font-semibold text-foreground mb-1.5 sm:mb-2 line-clamp-2 group-hover:text-primary transition-colors">
                     {market.title}
                   </h3>
                   {market.description && (
-                    <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                    <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4 line-clamp-2">
                       {market.description}
                     </p>
                   )}
 
                   {/* Probability Bar */}
-                  <div className="mb-4">
-                    <div className="flex justify-between text-sm mb-2">
+                  <div className="mb-3 sm:mb-4">
+                    <div className="flex justify-between text-xs sm:text-sm mb-1.5 sm:mb-2">
                       <span className="text-primary font-medium flex items-center gap-1">
-                        <TrendingUp className="w-4 h-4" />
+                        <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
                         Sim {(market.yes_probability * 100).toFixed(0)}%
                       </span>
                       <span className="text-destructive font-medium flex items-center gap-1">
                         Não {((1 - market.yes_probability) * 100).toFixed(0)}%
-                        <TrendingDown className="w-4 h-4" />
+                        <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4" />
                       </span>
                     </div>
-                    <div className="h-2 bg-muted rounded-full overflow-hidden">
+                    <div className="h-1.5 sm:h-2 bg-muted rounded-full overflow-hidden">
                       <div
                         className="h-full bg-primary rounded-full transition-all duration-500"
                         style={{ width: `${market.yes_probability * 100}%` }}
@@ -318,9 +321,9 @@ const Markets = () => {
                   </div>
 
                   {/* Footer */}
-                  <div className="flex items-center justify-between text-sm text-muted-foreground pt-4 border-t border-border">
+                  <div className="flex items-center justify-between text-xs sm:text-sm text-muted-foreground pt-3 sm:pt-4 border-t border-border">
                     <span className="flex items-center gap-1">
-                      <Clock className="w-4 h-4" />
+                      <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
                       {formatDate(market.end_date)}
                     </span>
                     <span className="font-medium text-foreground">
