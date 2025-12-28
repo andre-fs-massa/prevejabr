@@ -8,6 +8,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -107,6 +108,13 @@ const Header = () => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
+                    <DropdownMenuItem asChild className="gap-2 cursor-pointer">
+                      <Link to="/profile">
+                        <User className="w-4 h-4" />
+                        Meu Perfil
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut} className="gap-2 cursor-pointer">
                       <LogOut className="w-4 h-4" />
                       Sair
@@ -162,6 +170,12 @@ const Header = () => {
                     <p className="text-sm text-muted-foreground truncate px-4 py-2">
                       {user.email}
                     </p>
+                    <Button variant="ghost" className="w-full gap-2" asChild>
+                      <Link to="/profile">
+                        <User className="w-4 h-4" />
+                        Meu Perfil
+                      </Link>
+                    </Button>
                     <Button variant="ghost" className="w-full gap-2" onClick={handleSignOut}>
                       <LogOut className="w-4 h-4" />
                       Sair
