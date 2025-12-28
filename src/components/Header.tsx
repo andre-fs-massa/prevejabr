@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Menu, X, LogOut, User, Wallet } from "lucide-react";
+import { TrendingUp, Menu, X, LogOut, User, Wallet, Trophy } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -80,11 +80,12 @@ const Header = () => {
             <Link to="/markets" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
               Mercados
             </Link>
+            <Link to="/leaderboard" className="text-muted-foreground hover:text-foreground transition-colors font-medium flex items-center gap-1">
+              <Trophy className="w-4 h-4" />
+              Ranking
+            </Link>
             <a href="#como-funciona" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
               Como Funciona
-            </a>
-            <a href="#categorias" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
-              Categorias
             </a>
           </nav>
 
@@ -150,11 +151,12 @@ const Header = () => {
               <Link to="/markets" className="text-muted-foreground hover:text-foreground transition-colors font-medium py-2">
                 Mercados
               </Link>
+              <Link to="/leaderboard" className="text-muted-foreground hover:text-foreground transition-colors font-medium py-2 flex items-center gap-2">
+                <Trophy className="w-4 h-4" />
+                Ranking
+              </Link>
               <a href="#como-funciona" className="text-muted-foreground hover:text-foreground transition-colors font-medium py-2">
                 Como Funciona
-              </a>
-              <a href="#categorias" className="text-muted-foreground hover:text-foreground transition-colors font-medium py-2">
-                Categorias
               </a>
               <div className="flex flex-col gap-2 pt-4 border-t border-border">
                 {user ? (
