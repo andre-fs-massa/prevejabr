@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/Header";
@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import OrderForm from "@/components/OrderForm";
 import ResolveMarketDialog from "@/components/ResolveMarketDialog";
 import MarketComments from "@/components/MarketComments";
+import MarketReferralShare from "@/components/MarketReferralShare";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -54,9 +55,18 @@ const STATUS_LABELS = {
 
 const MarketDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
+  const referralCode = searchParams.get('ref');
   const { user } = useAuth();
   const [market, setMarket] = useState<Market | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
+
+  // Store referral code in localStorage when user visits via shared link
+  useEffect(() => {
+    if (referralCode) {
+      localStorage.setItem('referral_code', referralCode);
+    }
+  }, [referralCode]);
   const [loading, setLoading] = useState(true);
 
   const fetchMarket = async () => {
@@ -268,13 +278,16 @@ const MarketDetail = () => {
                       </Badge>
                     )}
                   </div>
-                  {user?.id === market.created_by && market.status === "open" && (
-                    <ResolveMarketDialog
-                      marketId={market.id}
-                      marketTitle={market.title}
-                      onResolved={fetchMarket}
-                    />
-                  )}
+                  <div className="flex items-center gap-2">
+                    <MarketReferralShare marketId={market.id} marketTitle={market.title} />
+                    {user?.id === market.created_by && market.status === "open" && (
+                      <ResolveMarketDialog
+                        marketId={market.id}
+                        marketTitle={market.title}
+                        onResolved={fetchMarket}
+                      />
+                    )}
+                  </div>
                 </div>
 
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-3 sm:mb-4">
