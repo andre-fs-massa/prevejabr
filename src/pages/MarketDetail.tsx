@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import OrderForm from "@/components/OrderForm";
+import ResolveMarketDialog from "@/components/ResolveMarketDialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -15,6 +16,9 @@ import {
   ArrowLeft,
   Users,
   DollarSign,
+  Gavel,
+  CheckCircle,
+  XCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -29,6 +33,7 @@ interface Market {
   yes_probability: number;
   total_volume: number;
   created_at: string;
+  created_by: string;
 }
 
 interface Order {
@@ -231,18 +236,39 @@ const MarketDetail = () => {
             <div className="lg:col-span-2 space-y-6">
               {/* Header */}
               <div className="bg-card rounded-2xl border border-border p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <Badge variant="outline">{market.category}</Badge>
-                  <Badge
-                    variant={market.status === "open" ? "default" : "secondary"}
-                    className={
-                      market.status === "open"
-                        ? "bg-primary/10 text-primary border-primary/20"
-                        : ""
-                    }
-                  >
-                    {STATUS_LABELS[market.status]}
-                  </Badge>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <Badge variant="outline">{market.category}</Badge>
+                    <Badge
+                      variant={market.status === "open" ? "default" : "secondary"}
+                      className={
+                        market.status === "open"
+                          ? "bg-primary/10 text-primary border-primary/20"
+                          : ""
+                      }
+                    >
+                      {STATUS_LABELS[market.status]}
+                    </Badge>
+                    {market.status === "resolved" && (
+                      <Badge
+                        variant={market.outcome ? "default" : "destructive"}
+                        className={
+                          market.outcome
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-destructive text-destructive-foreground"
+                        }
+                      >
+                        Resultado: {market.outcome ? "SIM" : "NÃO"}
+                      </Badge>
+                    )}
+                  </div>
+                  {user?.id === market.created_by && market.status === "open" && (
+                    <ResolveMarketDialog
+                      marketId={market.id}
+                      marketTitle={market.title}
+                      onResolved={fetchMarket}
+                    />
+                  )}
                 </div>
 
                 <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
