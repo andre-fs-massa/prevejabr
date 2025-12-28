@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Wallet, TrendingUp, TrendingDown, Clock, Trophy, XCircle } from "lucide-react";
+import { Wallet, TrendingUp, TrendingDown, Clock, Trophy, XCircle, PlusCircle } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -25,11 +25,23 @@ interface Order {
   };
 }
 
+interface Market {
+  id: string;
+  title: string;
+  category: string;
+  status: string;
+  outcome: boolean | null;
+  yes_probability: number;
+  total_volume: number;
+  end_date: string;
+}
+
 const Profile = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const [balance, setBalance] = useState<number | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [createdMarkets, setCreatedMarkets] = useState<Market[]>([]);
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
@@ -96,6 +108,17 @@ const Profile = () => {
       }));
 
       setOrders(ordersWithMarkets);
+    }
+
+    // Fetch markets created by user
+    const { data: createdMarketsData } = await supabase
+      .from("markets")
+      .select("id, title, category, status, outcome, yes_probability, total_volume, end_date")
+      .eq("created_by", user.id)
+      .order("created_at", { ascending: false });
+
+    if (createdMarketsData) {
+      setCreatedMarkets(createdMarketsData);
     }
 
     setLoadingData(false);
@@ -207,6 +230,86 @@ const Profile = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Created Markets */}
+        <Card className="mb-6 sm:mb-8">
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <PlusCircle className="h-4 w-4 sm:h-5 sm:w-5" />
+              Mercados Criados
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 sm:p-6 pt-0">
+            {createdMarkets.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-6 sm:py-8">
+                Você ainda não criou nenhum mercado.
+              </p>
+            ) : (
+              <div className="space-y-3 sm:space-y-4">
+                {createdMarkets.map((market) => (
+                  <Link
+                    key={market.id}
+                    to={`/markets/${market.id}`}
+                    className="flex flex-col p-3 sm:p-4 rounded-lg sm:rounded-xl border border-border hover:bg-muted/50 transition-colors gap-3"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-foreground text-sm sm:text-base mb-1 line-clamp-2">
+                        {market.title}
+                      </p>
+                      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-muted-foreground">
+                        <Badge variant="outline" className="text-[10px] sm:text-xs">
+                          {market.category}
+                        </Badge>
+                        <span>•</span>
+                        <span>
+                          {format(new Date(market.end_date), "dd MMM yyyy", {
+                            locale: ptBR,
+                          })}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 pt-2 border-t border-border sm:border-0 sm:pt-0">
+                      <div className="text-left sm:text-right">
+                        <p className="text-xs text-muted-foreground">Volume</p>
+                        <p className="font-semibold text-sm sm:text-base">
+                          R$ {Number(market.total_volume).toFixed(2)}
+                        </p>
+                      </div>
+
+                      <div className="text-left sm:text-right">
+                        <p className="text-xs text-muted-foreground">Prob. SIM</p>
+                        <p className="font-semibold text-sm sm:text-base text-primary">
+                          {(Number(market.yes_probability) * 100).toFixed(0)}%
+                        </p>
+                      </div>
+
+                      {market.status === "resolved" ? (
+                        <Badge
+                          className={
+                            market.outcome
+                              ? "bg-green-500/10 text-green-500 border-green-500/20 text-xs"
+                              : "bg-destructive/10 text-destructive border-destructive/20 text-xs"
+                          }
+                        >
+                          {market.outcome ? "SIM" : "NÃO"}
+                        </Badge>
+                      ) : market.status === "closed" ? (
+                        <Badge variant="secondary" className="text-xs">
+                          Fechado
+                        </Badge>
+                      ) : (
+                        <Badge variant="outline" className="text-muted-foreground text-xs">
+                          Aberto
+                        </Badge>
+                      )}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
         {/* Orders History */}
         <Card>
