@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { TrendingUp, TrendingDown, AlertCircle } from "lucide-react";
+import { TrendingUp, TrendingDown, AlertCircle, Wallet } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 
@@ -25,6 +25,45 @@ const OrderForm = ({
   const [selectedSide, setSelectedSide] = useState<"yes" | "no">("yes");
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
+  const [balance, setBalance] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (user) {
+      const fetchBalance = async () => {
+        const { data } = await supabase
+          .from('wallets')
+          .select('balance')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        
+        if (data) {
+          setBalance(Number(data.balance));
+        }
+      };
+      fetchBalance();
+
+      // Realtime subscription for balance updates
+      const channel = supabase
+        .channel('order-form-wallet')
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'wallets',
+            filter: `user_id=eq.${user.id}`,
+          },
+          (payload) => {
+            setBalance(Number(payload.new.balance));
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    }
+  }, [user]);
 
   const currentPrice = selectedSide === "yes" ? yesProbability : 1 - yesProbability;
   const potentialReturn = amount ? parseFloat(amount) / currentPrice : 0;
@@ -44,7 +83,25 @@ const OrderForm = ({
       return;
     }
 
+    if (balance === null || amountValue > balance) {
+      toast.error("Saldo insuficiente para realizar esta aposta");
+      return;
+    }
+
     setLoading(true);
+
+    // Deduct from wallet first
+    const { error: walletError } = await supabase
+      .from("wallets")
+      .update({ balance: balance - amountValue })
+      .eq("user_id", user.id);
+
+    if (walletError) {
+      console.error("Error updating wallet:", walletError);
+      toast.error("Erro ao processar pagamento");
+      setLoading(false);
+      return;
+    }
 
     const { error } = await supabase.from("orders").insert({
       user_id: user.id,
@@ -56,6 +113,11 @@ const OrderForm = ({
 
     if (error) {
       console.error("Error placing order:", error);
+      // Refund the wallet if order failed
+      await supabase
+        .from("wallets")
+        .update({ balance: balance })
+        .eq("user_id", user.id);
       toast.error("Erro ao realizar aposta");
     } else {
       toast.success("Aposta realizada com sucesso!");
@@ -171,6 +233,17 @@ const OrderForm = ({
           </button>
         </div>
 
+        {/* Balance Display */}
+        {balance !== null && (
+          <div className="flex items-center justify-between p-3 bg-primary/10 rounded-xl border border-primary/20">
+            <div className="flex items-center gap-2">
+              <Wallet className="w-4 h-4 text-primary" />
+              <span className="text-sm text-muted-foreground">Seu saldo:</span>
+            </div>
+            <span className="font-bold text-primary">R$ {balance.toFixed(2)}</span>
+          </div>
+        )}
+
         {/* Amount Input */}
         <div className="space-y-2">
           <Label htmlFor="amount">Valor da Aposta (R$)</Label>
@@ -178,12 +251,16 @@ const OrderForm = ({
             id="amount"
             type="number"
             min="1"
+            max={balance || undefined}
             step="0.01"
             placeholder="0.00"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             className="text-lg"
           />
+          {amount && parseFloat(amount) > (balance || 0) && (
+            <p className="text-xs text-destructive">Saldo insuficiente</p>
+          )}
         </div>
 
         {/* Potential Return */}
