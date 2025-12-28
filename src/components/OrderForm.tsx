@@ -66,8 +66,9 @@ const OrderForm = ({
   }, [user]);
 
   const currentPrice = selectedSide === "yes" ? yesProbability : 1 - yesProbability;
-  const potentialReturn = amount ? parseFloat(amount) / currentPrice : 0;
-  const profit = potentialReturn - parseFloat(amount || "0");
+  const amountValue = parseFloat(amount) || 0;
+  const potentialReturn = currentPrice > 0 && amountValue > 0 ? amountValue / currentPrice : 0;
+  const profit = potentialReturn > 0 ? potentialReturn - amountValue : 0;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
