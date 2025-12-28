@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
-import { MessageSquare, Send, Trash2 } from "lucide-react";
+import { MessageSquare, Send, Trash2, Reply, ChevronDown, ChevronUp } from "lucide-react";
 import { toast } from "sonner";
 
 interface Comment {
@@ -12,18 +12,225 @@ interface Comment {
   user_id: string;
   content: string;
   created_at: string;
+  parent_id: string | null;
+  replies?: Comment[];
 }
 
 interface MarketCommentsProps {
   marketId: string;
 }
 
+interface CommentItemProps {
+  comment: Comment;
+  user: { id: string } | null;
+  onDelete: (id: string) => void;
+  onReply: (parentId: string) => void;
+  replyingTo: string | null;
+  replyContent: string;
+  setReplyContent: (content: string) => void;
+  onSubmitReply: (parentId: string) => void;
+  submitting: boolean;
+  depth?: number;
+}
+
+const CommentItem = ({
+  comment,
+  user,
+  onDelete,
+  onReply,
+  replyingTo,
+  replyContent,
+  setReplyContent,
+  onSubmitReply,
+  submitting,
+  depth = 0,
+}: CommentItemProps) => {
+  const [showReplies, setShowReplies] = useState(true);
+  const hasReplies = comment.replies && comment.replies.length > 0;
+  const maxDepth = 3;
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const formatUserId = (userId: string) => {
+    return userId.slice(0, 8);
+  };
+
+  return (
+    <div className={`${depth > 0 ? "ml-4 sm:ml-6 border-l-2 border-border pl-3 sm:pl-4" : ""}`}>
+      <div className="bg-muted/30 rounded-lg p-3 sm:p-4">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center">
+              <span className="text-xs font-medium text-primary">
+                {formatUserId(comment.user_id).slice(0, 2).toUpperCase()}
+              </span>
+            </div>
+            <span className="text-xs text-muted-foreground">
+              Usuário {formatUserId(comment.user_id)}
+            </span>
+            <span className="text-xs text-muted-foreground">•</span>
+            <span className="text-xs text-muted-foreground">
+              {formatDate(comment.created_at)}
+            </span>
+          </div>
+          <div className="flex items-center gap-1">
+            {user && depth < maxDepth && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 px-2 text-muted-foreground hover:text-primary"
+                onClick={() => onReply(comment.id)}
+              >
+                <Reply className="w-4 h-4" />
+              </Button>
+            )}
+            {user?.id === comment.user_id && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive"
+                onClick={() => onDelete(comment.id)}
+              >
+                <Trash2 className="w-4 h-4" />
+              </Button>
+            )}
+          </div>
+        </div>
+        <p className="text-sm text-foreground whitespace-pre-wrap break-words">
+          {comment.content}
+        </p>
+      </div>
+
+      {/* Reply Form */}
+      {replyingTo === comment.id && (
+        <div className="mt-2 ml-4 sm:ml-6">
+          <Textarea
+            value={replyContent}
+            onChange={(e) => setReplyContent(e.target.value)}
+            placeholder="Escreva sua resposta..."
+            className="mb-2 min-h-[60px] resize-none text-sm"
+            maxLength={1000}
+          />
+          <div className="flex items-center justify-end gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onReply("")}
+            >
+              Cancelar
+            </Button>
+            <Button
+              size="sm"
+              disabled={submitting || !replyContent.trim()}
+              onClick={() => onSubmitReply(comment.id)}
+            >
+              <Send className="w-3 h-3 mr-1" />
+              Responder
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Replies */}
+      {hasReplies && (
+        <div className="mt-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-6 px-2 text-xs text-muted-foreground"
+            onClick={() => setShowReplies(!showReplies)}
+          >
+            {showReplies ? (
+              <>
+                <ChevronUp className="w-3 h-3 mr-1" />
+                Ocultar respostas ({comment.replies!.length})
+              </>
+            ) : (
+              <>
+                <ChevronDown className="w-3 h-3 mr-1" />
+                Ver respostas ({comment.replies!.length})
+              </>
+            )}
+          </Button>
+          {showReplies && (
+            <div className="mt-2 space-y-2">
+              {comment.replies!.map((reply) => (
+                <CommentItem
+                  key={reply.id}
+                  comment={reply}
+                  user={user}
+                  onDelete={onDelete}
+                  onReply={onReply}
+                  replyingTo={replyingTo}
+                  replyContent={replyContent}
+                  setReplyContent={setReplyContent}
+                  onSubmitReply={onSubmitReply}
+                  submitting={submitting}
+                  depth={depth + 1}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const MarketComments = ({ marketId }: MarketCommentsProps) => {
   const { user } = useAuth();
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
+  const [replyContent, setReplyContent] = useState("");
+  const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+
+  const buildCommentTree = (flatComments: Comment[]): Comment[] => {
+    const commentMap = new Map<string, Comment>();
+    const rootComments: Comment[] = [];
+
+    // First pass: create a map of all comments
+    flatComments.forEach((comment) => {
+      commentMap.set(comment.id, { ...comment, replies: [] });
+    });
+
+    // Second pass: build the tree
+    flatComments.forEach((comment) => {
+      const commentWithReplies = commentMap.get(comment.id)!;
+      if (comment.parent_id) {
+        const parent = commentMap.get(comment.parent_id);
+        if (parent) {
+          parent.replies!.push(commentWithReplies);
+        }
+      } else {
+        rootComments.push(commentWithReplies);
+      }
+    });
+
+    // Sort replies by date (oldest first for chronological order)
+    const sortReplies = (comments: Comment[]) => {
+      comments.forEach((comment) => {
+        if (comment.replies && comment.replies.length > 0) {
+          comment.replies.sort(
+            (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+          );
+          sortReplies(comment.replies);
+        }
+      });
+    };
+
+    sortReplies(rootComments);
+
+    return rootComments;
+  };
 
   const fetchComments = async () => {
     const { data, error } = await supabase
@@ -35,7 +242,8 @@ const MarketComments = ({ marketId }: MarketCommentsProps) => {
     if (error) {
       console.error("Error fetching comments:", error);
     } else {
-      setComments(data || []);
+      const tree = buildCommentTree(data || []);
+      setComments(tree);
     }
     setLoading(false);
   };
@@ -44,7 +252,6 @@ const MarketComments = ({ marketId }: MarketCommentsProps) => {
     fetchComments();
   }, [marketId]);
 
-  // Realtime subscription for comments
   useEffect(() => {
     const channel = supabase
       .channel(`comments-${marketId}`)
@@ -92,6 +299,7 @@ const MarketComments = ({ marketId }: MarketCommentsProps) => {
       market_id: marketId,
       user_id: user.id,
       content: trimmedComment,
+      parent_id: null,
     });
 
     if (error) {
@@ -100,6 +308,54 @@ const MarketComments = ({ marketId }: MarketCommentsProps) => {
     } else {
       setNewComment("");
       toast.success("Comentário enviado!");
+    }
+
+    setSubmitting(false);
+  };
+
+  const handleReply = (parentId: string) => {
+    if (replyingTo === parentId) {
+      setReplyingTo(null);
+      setReplyContent("");
+    } else {
+      setReplyingTo(parentId);
+      setReplyContent("");
+    }
+  };
+
+  const handleSubmitReply = async (parentId: string) => {
+    if (!user) {
+      toast.error("Você precisa estar logado para responder");
+      return;
+    }
+
+    const trimmedReply = replyContent.trim();
+    if (!trimmedReply) {
+      toast.error("Digite uma resposta");
+      return;
+    }
+
+    if (trimmedReply.length > 1000) {
+      toast.error("Resposta muito longa (máximo 1000 caracteres)");
+      return;
+    }
+
+    setSubmitting(true);
+
+    const { error } = await supabase.from("comments").insert({
+      market_id: marketId,
+      user_id: user.id,
+      content: trimmedReply,
+      parent_id: parentId,
+    });
+
+    if (error) {
+      console.error("Error creating reply:", error);
+      toast.error("Erro ao enviar resposta");
+    } else {
+      setReplyContent("");
+      setReplyingTo(null);
+      toast.success("Resposta enviada!");
     }
 
     setSubmitting(false);
@@ -119,17 +375,10 @@ const MarketComments = ({ marketId }: MarketCommentsProps) => {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("pt-BR", {
-      day: "2-digit",
-      month: "short",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
-  const formatUserId = (userId: string) => {
-    return userId.slice(0, 8);
+  const countAllComments = (comments: Comment[]): number => {
+    return comments.reduce((count, comment) => {
+      return count + 1 + (comment.replies ? countAllComments(comment.replies) : 0);
+    }, 0);
   };
 
   if (loading) {
@@ -158,7 +407,7 @@ const MarketComments = ({ marketId }: MarketCommentsProps) => {
       <div className="flex items-center gap-2 mb-4">
         <MessageSquare className="w-5 h-5 text-primary" />
         <h2 className="text-base sm:text-lg font-semibold text-foreground">
-          Comentários ({comments.length})
+          Comentários ({countAllComments(comments)})
         </h2>
       </div>
 
@@ -202,40 +451,18 @@ const MarketComments = ({ marketId }: MarketCommentsProps) => {
       ) : (
         <div className="space-y-4">
           {comments.map((comment) => (
-            <div
+            <CommentItem
               key={comment.id}
-              className="bg-muted/30 rounded-lg p-3 sm:p-4"
-            >
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center">
-                    <span className="text-xs font-medium text-primary">
-                      {formatUserId(comment.user_id).slice(0, 2).toUpperCase()}
-                    </span>
-                  </div>
-                  <span className="text-xs text-muted-foreground">
-                    Usuário {formatUserId(comment.user_id)}
-                  </span>
-                  <span className="text-xs text-muted-foreground">•</span>
-                  <span className="text-xs text-muted-foreground">
-                    {formatDate(comment.created_at)}
-                  </span>
-                </div>
-                {user?.id === comment.user_id && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive"
-                    onClick={() => handleDelete(comment.id)}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                )}
-              </div>
-              <p className="text-sm text-foreground whitespace-pre-wrap break-words">
-                {comment.content}
-              </p>
-            </div>
+              comment={comment}
+              user={user}
+              onDelete={handleDelete}
+              onReply={handleReply}
+              replyingTo={replyingTo}
+              replyContent={replyContent}
+              setReplyContent={setReplyContent}
+              onSubmitReply={handleSubmitReply}
+              submitting={submitting}
+            />
           ))}
         </div>
       )}
