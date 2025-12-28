@@ -53,13 +53,6 @@ const MarketDetail = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (id) {
-      fetchMarket();
-      fetchOrders();
-    }
-  }, [id]);
-
   const fetchMarket = async () => {
     const { data, error } = await supabase
       .from("markets")
@@ -90,6 +83,64 @@ const MarketDetail = () => {
       setOrders(data || []);
     }
   };
+
+  // Initial data fetch
+  useEffect(() => {
+    if (id) {
+      fetchMarket();
+      fetchOrders();
+    }
+  }, [id]);
+
+  // Realtime subscription for orders
+  useEffect(() => {
+    if (!id) return;
+
+    const ordersChannel = supabase
+      .channel(`orders-${id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'orders',
+          filter: `market_id=eq.${id}`,
+        },
+        () => {
+          fetchOrders();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(ordersChannel);
+    };
+  }, [id]);
+
+  // Realtime subscription for market probability updates
+  useEffect(() => {
+    if (!id) return;
+
+    const marketChannel = supabase
+      .channel(`market-${id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'markets',
+          filter: `id=eq.${id}`,
+        },
+        (payload) => {
+          setMarket((prev) => prev ? { ...prev, ...payload.new } : null);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(marketChannel);
+    };
+  }, [id]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("pt-BR", {
