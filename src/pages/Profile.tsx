@@ -133,7 +133,7 @@ const Profile = () => {
     orders.forEach((order) => {
       const amount = Number(order.amount);
       const price = Number(order.price);
-      const potentialReturn = amount / price;
+      const potentialReturn = price > 0 ? amount / price : 0;
 
       totalBet += amount;
 
