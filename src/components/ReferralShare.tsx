@@ -77,7 +77,7 @@ const ReferralShare = () => {
 
   const handleWhatsAppShare = () => {
     const link = getReferralLink();
-    const message = `🎯 Venha apostar em previsões comigo no Preveja.br! Use meu código e ganhe R$ 25 de bônus!\n\n${link}`;
+    const message = `🎯 Venha apostar em previsões comigo no Preveja.br! Use meu código e ganhe 25 pontos de bônus!\n\n${link}`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
   };
@@ -115,7 +115,7 @@ const ReferralShare = () => {
       <CardHeader className="p-4 sm:p-6">
         <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
           <Gift className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-          Indique e Ganhe R$ 25
+          Indique e Ganhe 25 pontos
         </CardTitle>
       </CardHeader>
       <CardContent className="p-4 sm:p-6 pt-0 space-y-4">
@@ -129,7 +129,7 @@ const ReferralShare = () => {
           <div className="p-3 rounded-lg bg-muted/50 text-center">
             <Gift className="h-5 w-5 text-green-500 mx-auto mb-1" />
             <p className="text-xl font-bold text-green-500">
-              R$ {stats.totalEarnings.toFixed(0)}
+              {stats.totalEarnings.toFixed(0)} pts
             </p>
             <p className="text-xs text-muted-foreground">Ganhos</p>
           </div>
@@ -166,7 +166,7 @@ const ReferralShare = () => {
         </div>
 
         <p className="text-xs text-muted-foreground text-center">
-          Cada amigo que se cadastrar pelo seu link te dá R$ 25!
+          Cada amigo que se cadastrar pelo seu link te dá 25 pontos!
         </p>
       </CardContent>
     </Card>

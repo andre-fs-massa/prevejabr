@@ -181,11 +181,8 @@ const MarketDetail = () => {
     });
   };
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(value);
+  const formatPoints = (value: number) => {
+    return `${value.toFixed(0)} pts`;
   };
 
   if (loading) {
@@ -355,7 +352,7 @@ const MarketDetail = () => {
                     <div className="min-w-0">
                       <p className="text-[10px] sm:text-xs">Volume</p>
                       <p className="text-xs sm:text-sm font-medium text-foreground truncate">
-                        {formatCurrency(market.total_volume)}
+                        {formatPoints(market.total_volume)}
                       </p>
                     </div>
                   </div>
@@ -399,7 +396,7 @@ const MarketDetail = () => {
                             {order.side === "yes" ? "SIM" : "NÃO"}
                           </Badge>
                           <span className="text-xs sm:text-sm text-muted-foreground">
-                            {formatCurrency(order.amount)} @{" "}
+                            {formatPoints(order.amount)} @{" "}
                             {(order.price * 100).toFixed(0)}%
                           </span>
                         </div>

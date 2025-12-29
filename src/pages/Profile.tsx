@@ -184,7 +184,7 @@ const Profile = () => {
             </CardHeader>
             <CardContent className="p-3 sm:p-6 pt-0">
               <div className="text-lg sm:text-2xl font-bold text-primary">
-                R$ {balance?.toFixed(2) || "0.00"}
+                {balance?.toFixed(0) || "0"} pts
               </div>
             </CardContent>
           </Card>
@@ -198,7 +198,7 @@ const Profile = () => {
             </CardHeader>
             <CardContent className="p-3 sm:p-6 pt-0">
               <div className="text-lg sm:text-2xl font-bold">
-                R$ {stats.totalBet.toFixed(2)}
+                {stats.totalBet.toFixed(0)} pts
               </div>
             </CardContent>
           </Card>
@@ -212,7 +212,7 @@ const Profile = () => {
             </CardHeader>
             <CardContent className="p-3 sm:p-6 pt-0">
               <div className="text-lg sm:text-2xl font-bold text-green-500">
-                +R$ {stats.confirmedWins.toFixed(2)}
+                +{stats.confirmedWins.toFixed(0)} pts
               </div>
             </CardContent>
           </Card>
@@ -226,7 +226,7 @@ const Profile = () => {
             </CardHeader>
             <CardContent className="p-3 sm:p-6 pt-0">
               <div className="text-lg sm:text-2xl font-bold text-destructive">
-                -R$ {stats.confirmedLosses.toFixed(2)}
+                -{stats.confirmedLosses.toFixed(0)} pts
               </div>
             </CardContent>
           </Card>
@@ -279,7 +279,7 @@ const Profile = () => {
                       <div className="text-left sm:text-right">
                         <p className="text-xs text-muted-foreground">Volume</p>
                         <p className="font-semibold text-sm sm:text-base">
-                          R$ {Number(market.total_volume).toFixed(2)}
+                          {Number(market.total_volume).toFixed(0)} pts
                         </p>
                       </div>
 
@@ -360,7 +360,7 @@ const Profile = () => {
                           >
                             {order.side === "yes" ? "SIM" : "NÃO"}
                           </Badge>
-                          <span>R$ {Number(order.amount).toFixed(2)}</span>
+                          <span>{Number(order.amount).toFixed(0)} pts</span>
                           <span className="hidden sm:inline">•</span>
                           <span className="hidden sm:inline">
                             {format(new Date(order.created_at), "dd MMM yyyy, HH:mm", {
@@ -378,7 +378,7 @@ const Profile = () => {
                       <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 pt-2 border-t border-border sm:border-0 sm:pt-0">
                         <div className="text-left sm:text-right">
                           <p className="text-xs text-muted-foreground">Retorno</p>
-                          <p className="font-semibold text-sm sm:text-base">R$ {potentialReturn.toFixed(2)}</p>
+                          <p className="font-semibold text-sm sm:text-base">{potentialReturn.toFixed(0)} pts</p>
                         </div>
 
                         {order.market.status === "resolved" ? (

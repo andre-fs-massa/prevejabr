@@ -97,7 +97,7 @@ const Header = () => {
                   <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 rounded-lg border border-primary/20">
                     <Wallet className="w-4 h-4 text-primary" />
                     <span className="font-semibold text-primary">
-                      R$ {balance.toFixed(2)}
+                      {balance.toFixed(0)} pts
                     </span>
                   </div>
                 )}
@@ -165,7 +165,7 @@ const Header = () => {
                       <div className="flex items-center justify-center gap-2 px-4 py-2 bg-primary/10 rounded-lg border border-primary/20 mx-4">
                         <Wallet className="w-4 h-4 text-primary" />
                         <span className="font-semibold text-primary">
-                          R$ {balance.toFixed(2)}
+                          {balance.toFixed(0)} pts
                         </span>
                       </div>
                     )}
