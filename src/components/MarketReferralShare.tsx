@@ -60,7 +60,7 @@ const MarketReferralShare = ({ marketId, marketTitle }: MarketReferralShareProps
     toast({
       title: "Link copiado!",
       description: referralCode 
-        ? "Compartilhe e ganhe R$ 25 por cada novo usuário!" 
+        ? "Compartilhe e ganhe 25 pontos por cada novo usuário!" 
         : "Compartilhe este mercado com seus amigos.",
     });
     setTimeout(() => setCopied(false), 2000);
@@ -69,7 +69,7 @@ const MarketReferralShare = ({ marketId, marketTitle }: MarketReferralShareProps
   const handleWhatsAppShare = () => {
     const link = getMarketLink();
     const message = referralCode
-      ? `🎯 O que você acha? "${marketTitle}"\n\nAposte comigo no Preveja.br! Use meu código e ganhe R$ 25 de bônus!\n\n${link}`
+      ? `🎯 O que você acha? "${marketTitle}"\n\nAposte comigo no Preveja.br! Use meu código e ganhe 25 pontos de bônus!\n\n${link}`
       : `🎯 O que você acha? "${marketTitle}"\n\nVeja no Preveja.br:\n\n${link}`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
@@ -104,7 +104,7 @@ const MarketReferralShare = ({ marketId, marketTitle }: MarketReferralShareProps
             <h4 className="font-medium text-sm">Compartilhar mercado</h4>
             {user && referralCode ? (
               <p className="text-xs text-muted-foreground">
-                Ganhe R$ 25 por cada novo usuário que se cadastrar!
+                Ganhe 25 pontos por cada novo usuário que se cadastrar!
               </p>
             ) : (
               <p className="text-xs text-muted-foreground">

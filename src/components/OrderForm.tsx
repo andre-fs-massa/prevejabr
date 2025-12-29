@@ -243,13 +243,13 @@ const OrderForm = ({
               <Wallet className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
               <span className="text-xs sm:text-sm text-muted-foreground">Seu saldo:</span>
             </div>
-            <span className="font-bold text-sm sm:text-base text-primary">R$ {balance.toFixed(2)}</span>
+            <span className="font-bold text-sm sm:text-base text-primary">{balance.toFixed(0)} pts</span>
           </div>
         )}
 
         {/* Amount Input */}
         <div className="space-y-1.5 sm:space-y-2">
-          <Label htmlFor="amount" className="text-sm">Valor da Aposta (R$)</Label>
+          <Label htmlFor="amount" className="text-sm">Valor da Aposta (pontos)</Label>
           <Input
             id="amount"
             type="number"
@@ -278,13 +278,13 @@ const OrderForm = ({
             <div className="flex justify-between text-xs sm:text-sm">
               <span className="text-muted-foreground">Retorno potencial</span>
               <span className="font-medium text-foreground">
-                R$ {potentialReturn.toFixed(2)}
+                {potentialReturn.toFixed(0)} pts
               </span>
             </div>
             <div className="flex justify-between text-xs sm:text-sm pt-1.5 sm:pt-2 border-t border-border">
               <span className="text-muted-foreground">Lucro potencial</span>
               <span className="font-bold text-primary">
-                +R$ {profit.toFixed(2)}
+                +{profit.toFixed(0)} pts
               </span>
             </div>
           </div>

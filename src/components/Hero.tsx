@@ -59,8 +59,8 @@ const Hero = () => {
                 <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-secondary" />
               </div>
               <div className="text-left">
-                <p className="text-xl sm:text-2xl font-bold text-primary-foreground">R$ 2.5M+</p>
-                <p className="text-xs sm:text-sm text-primary-foreground/60">Volume negociado</p>
+                <p className="text-xl sm:text-2xl font-bold text-primary-foreground">2.5M+ pts</p>
+                <p className="text-xs sm:text-sm text-primary-foreground/60">Pontos negociados</p>
               </div>
             </div>
             <div className="flex items-center justify-center gap-3 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10">

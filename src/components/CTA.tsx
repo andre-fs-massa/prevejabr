@@ -20,7 +20,7 @@ const CTA = () => {
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 mb-8">
               <Sparkles className="w-4 h-4 text-secondary" />
               <span className="text-sm font-medium text-primary-foreground/90">
-                Cadastro grátis • Bônus de R$ 50
+                Cadastro grátis • Bônus de 50 pontos
               </span>
             </div>
 

@@ -42,9 +42,9 @@ const FeaturedMarkets = () => {
 
   const formatVolume = (value: number) => {
     if (value >= 1000) {
-      return `R$ ${(value / 1000).toFixed(0)}K`;
+      return `${(value / 1000).toFixed(0)}K pts`;
     }
-    return `R$ ${value.toFixed(0)}`;
+    return `${value.toFixed(0)} pts`;
   };
 
   const formatDate = (dateString: string) => {
