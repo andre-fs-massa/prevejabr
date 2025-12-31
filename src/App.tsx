@@ -11,6 +11,7 @@ import MarketDetail from "./pages/MarketDetail";
 import Profile from "./pages/Profile";
 import Leaderboard from "./pages/Leaderboard";
 import NotFound from "./pages/NotFound";
+import Terms from "./pages/Terms";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/markets/:id" element={<MarketDetail />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/termos" element={<Terms />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
