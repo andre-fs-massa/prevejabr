@@ -20,25 +20,25 @@ const CTA = () => {
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 mb-8">
               <Sparkles className="w-4 h-4 text-secondary" />
               <span className="text-sm font-medium text-primary-foreground/90">
-                Cadastro grátis • Bônus de 50 pontos
+                🎮 100% gratuito • Bônus de 100 pontos
               </span>
             </div>
 
             {/* Headline */}
             <h2 className="font-display text-3xl md:text-5xl font-bold text-primary-foreground mb-6 max-w-3xl mx-auto">
-              Pronto para transformar suas previsões em lucro?
+              Pronto para testar suas previsões?
             </h2>
 
             {/* Subheadline */}
             <p className="text-lg text-primary-foreground/80 max-w-xl mx-auto mb-10">
-              Junte-se a milhares de brasileiros que já estão lucrando com suas opiniões. 
-              Crie sua conta em segundos.
+              Junte-se a milhares de jogadores e descubra quem acerta mais. 
+              Sem dinheiro real, pura diversão!
             </p>
 
             {/* CTA */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button variant="hero" size="xl">
-                Criar Conta Grátis
+                Começar a Jogar
                 <ArrowRight className="w-5 h-5" />
               </Button>
               <Button variant="heroOutline" size="lg">
@@ -48,9 +48,9 @@ const CTA = () => {
 
             {/* Trust badges */}
             <div className="flex flex-wrap items-center justify-center gap-6 mt-12 text-sm text-primary-foreground/60">
-              <span>✓ Sem taxas ocultas</span>
-              <span>✓ Saques em 24h</span>
-              <span>✓ Suporte em português</span>
+              <span>✓ 100% gratuito</span>
+              <span>✓ Sem dinheiro real</span>
+              <span>✓ Apenas entretenimento</span>
             </div>
           </div>
         </div>
