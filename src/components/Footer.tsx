@@ -1,22 +1,31 @@
-import { TrendingUp, Twitter, Instagram, Linkedin, Youtube } from "lucide-react";
+import { TrendingUp, Twitter, Instagram, Linkedin, Youtube, Gamepad2 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
     <footer className="bg-foreground text-background">
       <div className="container mx-auto px-4 py-10 sm:py-16">
+        {/* Entertainment Disclaimer */}
+        <div className="bg-background/5 border border-background/10 rounded-xl p-4 mb-8 flex items-center gap-3">
+          <Gamepad2 className="w-5 h-5 text-secondary flex-shrink-0" />
+          <p className="text-xs sm:text-sm text-background/70">
+            <strong className="text-background/90">Plataforma de entretenimento.</strong> Utilizamos apenas pontos fictícios sem valor real. Não é site de apostas.
+          </p>
+        </div>
+        
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-12">
           {/* Brand */}
           <div className="col-span-2 lg:col-span-2">
-            <a href="/" className="flex items-center gap-2 mb-4 sm:mb-6">
+            <Link to="/" className="flex items-center gap-2 mb-4 sm:mb-6">
               <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl gradient-gold flex items-center justify-center">
                 <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-secondary-foreground" />
               </div>
               <span className="font-display text-lg sm:text-xl font-bold">
                 Preveja<span className="text-secondary">.br</span>
               </span>
-            </a>
+            </Link>
             <p className="text-sm sm:text-base text-background/60 mb-4 sm:mb-6 max-w-sm">
-              A plataforma de previsões mais confiável do Brasil. Transforme suas opiniões em oportunidades reais.
+              Jogo de previsões para entretenimento. Teste suas habilidades com pontos fictícios e divirta-se!
             </p>
             <div className="flex items-center gap-3 sm:gap-4">
               <a href="#" className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-background/10 flex items-center justify-center hover:bg-secondary hover:text-secondary-foreground transition-colors">
@@ -60,7 +69,7 @@ const Footer = () => {
             <ul className="space-y-2 sm:space-y-3 text-background/60 text-sm">
               <li><a href="#" className="hover:text-secondary transition-colors">Central de Ajuda</a></li>
               <li><a href="#" className="hover:text-secondary transition-colors">Contato</a></li>
-              <li><a href="#" className="hover:text-secondary transition-colors">Termos de Uso</a></li>
+              <li><Link to="/termos" className="hover:text-secondary transition-colors">Termos de Uso</Link></li>
               <li><a href="#" className="hover:text-secondary transition-colors">Privacidade</a></li>
             </ul>
           </div>
