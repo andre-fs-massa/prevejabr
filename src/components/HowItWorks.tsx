@@ -9,17 +9,17 @@ const steps = [
   {
     icon: MousePointerClick,
     title: "Faça sua previsão",
-    description: "Compre contratos de SIM ou NÃO baseado no que você acredita que vai acontecer.",
+    description: "Use seus pontos fictícios para apostar SIM ou NÃO no que você acredita que vai acontecer.",
   },
   {
     icon: Wallet,
     title: "Acompanhe em tempo real",
-    description: "Veja os preços mudarem conforme novas informações surgem. Negocie quando quiser.",
+    description: "Veja as probabilidades mudarem conforme novas informações surgem. Jogue quando quiser.",
   },
   {
     icon: Trophy,
-    title: "Receba seus ganhos",
-    description: "Se sua previsão estiver correta, cada contrato vale R$ 1,00. Lucro direto na conta.",
+    title: "Suba no ranking",
+    description: "Acertou? Ganhe pontos e mostre quem é o melhor previsor. Tudo por diversão!",
   },
 ];
 
@@ -34,10 +34,10 @@ const HowItWorks = () => {
         {/* Section header */}
         <div className="text-center mb-16">
           <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Como Funciona
+            Como Jogar
           </h2>
           <p className="text-muted-foreground max-w-lg mx-auto">
-            Simples, transparente e direto ao ponto. Comece a operar em minutos.
+            Simples e divertido. Comece a jogar em minutos com pontos fictícios.
           </p>
         </div>
 

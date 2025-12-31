@@ -21,20 +21,20 @@ const Hero = () => {
           <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 mb-6 sm:mb-8 animate-fade-in">
             <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
             <span className="text-xs sm:text-sm font-medium text-primary-foreground/90">
-              Mercado de previsões 100% brasileiro
+              🎮 Jogo de previsões • 100% gratuito
             </span>
           </div>
 
           {/* Headline */}
           <h1 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-primary-foreground leading-tight mb-4 sm:mb-6 animate-fade-in px-2" style={{ animationDelay: "0.1s" }}>
-            Transforme sua opinião em{" "}
-            <span className="text-gradient">oportunidade</span>
+            Teste suas previsões{" "}
+            <span className="text-gradient">sem riscos</span>
           </h1>
 
           {/* Subheadline */}
           <p className="text-base sm:text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-8 sm:mb-10 px-2 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-            Compre e venda contratos sobre eventos reais. Eleições, economia, esportes e muito mais. 
-            O futuro está nas suas mãos.
+            Jogue com pontos fictícios e descubra quem acerta mais. Eleições, economia, esportes e muito mais. 
+            Pura diversão, zero apostas reais.
           </p>
 
           {/* CTA Buttons */}
@@ -60,7 +60,7 @@ const Hero = () => {
               </div>
               <div className="text-left">
                 <p className="text-xl sm:text-2xl font-bold text-primary-foreground">2.5M+ pts</p>
-                <p className="text-xs sm:text-sm text-primary-foreground/60">Pontos negociados</p>
+                <p className="text-xs sm:text-sm text-primary-foreground/60">Pontos jogados</p>
               </div>
             </div>
             <div className="flex items-center justify-center gap-3 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10">
@@ -69,7 +69,7 @@ const Hero = () => {
               </div>
               <div className="text-left">
                 <p className="text-xl sm:text-2xl font-bold text-primary-foreground">50K+</p>
-                <p className="text-xs sm:text-sm text-primary-foreground/60">Usuários ativos</p>
+                <p className="text-xs sm:text-sm text-primary-foreground/60">Jogadores ativos</p>
               </div>
             </div>
             <div className="flex items-center justify-center gap-3 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10">
@@ -78,7 +78,7 @@ const Hero = () => {
               </div>
               <div className="text-left">
                 <p className="text-xl sm:text-2xl font-bold text-primary-foreground">100%</p>
-                <p className="text-xs sm:text-sm text-primary-foreground/60">Seguro e regulado</p>
+                <p className="text-xs sm:text-sm text-primary-foreground/60">Gratuito e seguro</p>
               </div>
             </div>
           </div>
