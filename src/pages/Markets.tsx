@@ -66,6 +66,7 @@ const Markets = () => {
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchMarkets();
   }, []);
 
