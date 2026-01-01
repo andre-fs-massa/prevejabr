@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Search, TrendingUp, TrendingDown, Clock, Filter } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 interface Market {
   id: string;
@@ -37,6 +37,7 @@ const CATEGORIES = [
   "Esportes",
   "Entretenimento",
   "Tecnologia",
+  "Mundo",
   "Clima",
 ];
 
@@ -46,6 +47,15 @@ const STATUS_LABELS = {
   resolved: "Resolvido",
 };
 
+const CATEGORY_ALIASES: Record<string, string> = {
+  Internacional: "Mundo",
+};
+
+const normalizeCategory = (category: string) => CATEGORY_ALIASES[category] ?? category;
+
+const isValidStatus = (status: string) =>
+  status === "all" || status === "open" || status === "closed" || status === "resolved";
+
 const Markets = () => {
   const [markets, setMarkets] = useState<Market[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,10 +63,28 @@ const Markets = () => {
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const { user } = useAuth();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     fetchMarkets();
   }, []);
+
+  useEffect(() => {
+    const categoriaParam =
+      searchParams.get("categoria") ?? searchParams.get("category");
+    const statusParam = searchParams.get("status");
+
+    if (categoriaParam) {
+      const normalizedCategory = normalizeCategory(categoriaParam);
+      setSelectedCategory(
+        CATEGORIES.includes(normalizedCategory) ? normalizedCategory : "Todos"
+      );
+    }
+
+    if (statusParam && isValidStatus(statusParam)) {
+      setSelectedStatus(statusParam);
+    }
+  }, [searchParams]);
 
   const fetchMarkets = async () => {
     setLoading(true);
@@ -79,7 +107,7 @@ const Markets = () => {
       market.description?.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesCategory =
-      selectedCategory === "Todos" || market.category === selectedCategory;
+      selectedCategory === "Todos" || normalizeCategory(market.category) === selectedCategory;
 
     const matchesStatus =
       selectedStatus === "all" || market.status === selectedStatus;
