@@ -65,7 +65,7 @@ const Categories = () => {
           {categories.map((category, index) => (
             <Link
               key={category.name}
-              to={`/mercados?categoria=${encodeURIComponent(category.name)}`}
+              to={`/markets?categoria=${encodeURIComponent(category.name)}`}
               className="group relative p-6 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-300 hover:shadow-card animate-fade-in"
               style={{ animationDelay: `${index * 0.05}s` }}
             >
