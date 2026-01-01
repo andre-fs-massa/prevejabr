@@ -1,4 +1,5 @@
 import { Building2, TrendingUp, Trophy, Tv, Zap, Globe } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const categories = [
   {
@@ -62,8 +63,9 @@ const Categories = () => {
         {/* Categories grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {categories.map((category, index) => (
-            <button
+            <Link
               key={category.name}
+              to={`/mercados?categoria=${encodeURIComponent(category.name)}`}
               className="group relative p-6 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-300 hover:shadow-card animate-fade-in"
               style={{ animationDelay: `${index * 0.05}s` }}
             >
@@ -84,7 +86,7 @@ const Categories = () => {
                   {category.count} mercados
                 </p>
               </div>
-            </button>
+            </Link>
           ))}
         </div>
       </div>
