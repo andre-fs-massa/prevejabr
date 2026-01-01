@@ -84,8 +84,9 @@ const MarketReferralShare = ({ marketId, marketTitle }: MarketReferralShareProps
 
   if (loading) {
     return (
-      <Button variant="outline" size="sm" disabled>
-        <Share2 className="h-4 w-4" />
+      <Button variant="secondary" size="lg" disabled className="gap-2 px-6 py-3 text-base font-semibold shadow-md">
+        <Share2 className="h-5 w-5" />
+        <span>Compartilhar</span>
       </Button>
     );
   }
@@ -93,9 +94,13 @@ const MarketReferralShare = ({ marketId, marketTitle }: MarketReferralShareProps
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
-          <Share2 className="h-4 w-4" />
-          <span className="hidden sm:inline">Compartilhar</span>
+        <Button 
+          variant="secondary" 
+          size="lg" 
+          className="gap-2 px-6 py-3 text-base font-semibold shadow-md hover:shadow-lg transition-all hover:scale-105 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground border-0"
+        >
+          <Share2 className="h-5 w-5" />
+          <span>Compartilhar</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-72 p-4" align="end">
