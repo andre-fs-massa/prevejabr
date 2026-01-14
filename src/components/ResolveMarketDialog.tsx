@@ -19,6 +19,81 @@ interface ResolveMarketDialogProps {
   onResolved: () => void;
 }
 
+const sendPushNotifications = async (
+  marketId: string,
+  marketTitle: string,
+  outcome: boolean
+) => {
+  try {
+    // Get all orders for this market
+    const { data: orders, error } = await supabase
+      .from("orders")
+      .select("user_id, side, amount, price")
+      .eq("market_id", marketId)
+      .eq("status", "filled");
+
+    if (error || !orders) {
+      console.error("Error fetching orders for notifications:", error);
+      return;
+    }
+
+    // Group users by win/lose
+    const winners: { userId: string; payout: number }[] = [];
+    const losers: string[] = [];
+
+    orders.forEach((order) => {
+      const isWinner =
+        (outcome === true && order.side === "yes") ||
+        (outcome === false && order.side === "no");
+
+      if (isWinner) {
+        const payout =
+          order.side === "yes"
+            ? Number(order.amount) / Number(order.price)
+            : Number(order.amount) / (1 - Number(order.price));
+        winners.push({ userId: order.user_id, payout: Math.round(payout) });
+      } else {
+        if (!losers.includes(order.user_id)) {
+          losers.push(order.user_id);
+        }
+      }
+    });
+
+    // Remove losers who also won (edge case: same user bet both sides)
+    const winnerIds = winners.map((w) => w.userId);
+    const onlyLosers = losers.filter((id) => !winnerIds.includes(id));
+
+    // Send notifications to winners
+    if (winners.length > 0) {
+      const uniqueWinners = [...new Set(winnerIds)];
+      await supabase.functions.invoke("send-push-notification", {
+        body: {
+          user_ids: uniqueWinners,
+          title: "🎉 Você ganhou!",
+          body: `Parabéns! Sua aposta no mercado "${marketTitle}" foi vencedora!`,
+          url: `/markets/${marketId}`,
+          tag: `market-${marketId}-win`,
+        },
+      });
+    }
+
+    // Send notifications to losers
+    if (onlyLosers.length > 0) {
+      await supabase.functions.invoke("send-push-notification", {
+        body: {
+          user_ids: onlyLosers,
+          title: "📊 Mercado Resolvido",
+          body: `O mercado "${marketTitle}" foi encerrado. Boa sorte na próxima!`,
+          url: `/markets/${marketId}`,
+          tag: `market-${marketId}-lose`,
+        },
+      });
+    }
+  } catch (error) {
+    console.error("Error sending push notifications:", error);
+  }
+};
+
 const ResolveMarketDialog = ({
   marketId,
   marketTitle,
@@ -48,16 +123,23 @@ const ResolveMarketDialog = ({
       if (updateError) throw updateError;
 
       // Then, distribute winnings to winners
-      const { error: distributeError } = await supabase
-        .rpc("distribute_market_winnings", { market_id_param: marketId });
+      const { error: distributeError } = await supabase.rpc(
+        "distribute_market_winnings",
+        { market_id_param: marketId }
+      );
 
       if (distributeError) {
         console.error("Error distributing winnings:", distributeError);
-        toast.error("Mercado resolvido, mas houve erro na distribuição de pontos");
+        toast.error(
+          "Mercado resolvido, mas houve erro na distribuição de pontos"
+        );
       } else {
         toast.success(
           `Mercado resolvido como ${selectedOutcome ? "SIM" : "NÃO"}. Pontos distribuídos aos vencedores!`
         );
+
+        // Send push notifications to all participants
+        sendPushNotifications(marketId, marketTitle, selectedOutcome);
       }
 
       setOpen(false);
