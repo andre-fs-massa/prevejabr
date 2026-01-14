@@ -36,7 +36,8 @@ const ResolveMarketDialog = ({
 
     setResolving(true);
     try {
-      const { error } = await supabase
+      // First, update the market status and outcome
+      const { error: updateError } = await supabase
         .from("markets")
         .update({
           status: "resolved",
@@ -44,11 +45,21 @@ const ResolveMarketDialog = ({
         })
         .eq("id", marketId);
 
-      if (error) throw error;
+      if (updateError) throw updateError;
 
-      toast.success(
-        `Mercado resolvido como ${selectedOutcome ? "SIM" : "NÃO"}`
-      );
+      // Then, distribute winnings to winners
+      const { error: distributeError } = await supabase
+        .rpc("distribute_market_winnings", { market_id_param: marketId });
+
+      if (distributeError) {
+        console.error("Error distributing winnings:", distributeError);
+        toast.error("Mercado resolvido, mas houve erro na distribuição de pontos");
+      } else {
+        toast.success(
+          `Mercado resolvido como ${selectedOutcome ? "SIM" : "NÃO"}. Pontos distribuídos aos vencedores!`
+        );
+      }
+
       setOpen(false);
       onResolved();
     } catch (error) {

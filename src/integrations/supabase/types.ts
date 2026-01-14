@@ -228,6 +228,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      distribute_market_winnings: {
+        Args: { market_id_param: string }
+        Returns: undefined
+      }
       process_referral: {
         Args: { new_user_id: string; referral_code: string }
         Returns: boolean
