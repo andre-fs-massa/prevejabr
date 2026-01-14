@@ -1,6 +1,7 @@
-import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
+import { useState, useEffect, createContext, useContext, ReactNode, useRef } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/hooks/use-toast';
 
 interface AuthContextType {
   user: User | null;
@@ -17,6 +18,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const previousBalanceRef = useRef<number | null>(null);
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -37,6 +39,61 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  // Subscribe to wallet balance changes for winning notifications
+  useEffect(() => {
+    if (!user) {
+      previousBalanceRef.current = null;
+      return;
+    }
+
+    // Fetch initial balance
+    const fetchInitialBalance = async () => {
+      const { data } = await supabase
+        .from('wallets')
+        .select('balance')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      
+      if (data) {
+        previousBalanceRef.current = Number(data.balance);
+      }
+    };
+    fetchInitialBalance();
+
+    // Subscribe to balance updates
+    const channel = supabase
+      .channel('wallet-winnings-notification')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'wallets',
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          const newBalance = Number(payload.new.balance);
+          const oldBalance = previousBalanceRef.current;
+          
+          // Only show toast if balance increased (user won points)
+          if (oldBalance !== null && newBalance > oldBalance) {
+            const gained = (newBalance - oldBalance).toFixed(2);
+            toast({
+              title: "🎉 Parabéns! Você ganhou!",
+              description: `Você recebeu ${gained} pontos de uma aposta vencedora!`,
+            });
+          }
+          
+          previousBalanceRef.current = newBalance;
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user]);
 
   const signUp = async (email: string, password: string) => {
     const redirectUrl = `${window.location.origin}/`;
