@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import PushNotificationToggle from "@/components/PushNotificationToggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -93,6 +94,7 @@ const Header = () => {
           <div className="hidden md:flex items-center gap-3">
             {user ? (
               <>
+                <PushNotificationToggle variant="icon" />
                 {balance !== null && (
                   <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 rounded-lg border border-primary/20">
                     <Wallet className="w-4 h-4 text-primary" />
