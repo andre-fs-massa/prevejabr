@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Search, TrendingUp, TrendingDown, Clock, Filter } from "lucide-react";
+import { Search, TrendingUp, TrendingDown, Clock, Filter, AlertTriangle } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 
 interface Market {
@@ -291,7 +291,9 @@ const Markets = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {filteredMarkets.map((market) => (
+              {filteredMarkets.map((market) => {
+                const isExpired = new Date(market.end_date) < new Date();
+                return (
                 <Link to={`/markets/${market.id}`} key={market.id}>
                 <article
                   className="bg-card rounded-xl sm:rounded-2xl border border-border p-4 sm:p-6 hover:shadow-card transition-all duration-300 group cursor-pointer"
@@ -301,22 +303,33 @@ const Markets = () => {
                     <Badge variant="outline" className="text-[10px] sm:text-xs">
                       {market.category}
                     </Badge>
-                    <Badge
-                      variant={
-                        market.status === "open"
-                          ? "default"
-                          : market.status === "closed"
-                          ? "secondary"
-                          : "outline"
-                      }
-                      className={`text-[10px] sm:text-xs ${
-                        market.status === "open"
-                          ? "bg-primary/10 text-primary border-primary/20"
-                          : ""
-                      }`}
-                    >
-                      {STATUS_LABELS[market.status]}
-                    </Badge>
+                    <div className="flex items-center gap-1">
+                      {isExpired && market.status === "open" && (
+                        <Badge
+                          variant="outline"
+                          className="text-[10px] sm:text-xs bg-amber-500/10 text-amber-600 border-amber-500/20"
+                        >
+                          <AlertTriangle className="w-3 h-3 mr-0.5" />
+                          Expirado
+                        </Badge>
+                      )}
+                      <Badge
+                        variant={
+                          market.status === "open"
+                            ? "default"
+                            : market.status === "closed"
+                            ? "secondary"
+                            : "outline"
+                        }
+                        className={`text-[10px] sm:text-xs ${
+                          market.status === "open" && !isExpired
+                            ? "bg-primary/10 text-primary border-primary/20"
+                            : ""
+                        }`}
+                      >
+                        {STATUS_LABELS[market.status]}
+                      </Badge>
+                    </div>
                   </div>
 
                   {/* Title & Description */}
@@ -361,7 +374,8 @@ const Markets = () => {
                   </div>
                 </article>
                 </Link>
-              ))}
+              );
+              })}
             </div>
           )}
         </div>

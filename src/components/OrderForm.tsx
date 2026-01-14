@@ -12,6 +12,7 @@ interface OrderFormProps {
   marketId: string;
   yesProbability: number;
   isOpen: boolean;
+  endDate: string;
   onOrderPlaced: () => void;
 }
 
@@ -19,6 +20,7 @@ const OrderForm = ({
   marketId,
   yesProbability,
   isOpen,
+  endDate,
   onOrderPlaced,
 }: OrderFormProps) => {
   const { user } = useAuth();
@@ -131,16 +133,20 @@ const OrderForm = ({
     setLoading(false);
   };
 
-  if (!isOpen) {
+  const isExpired = new Date(endDate) < new Date();
+
+  if (!isOpen || isExpired) {
     return (
       <div className="bg-card rounded-2xl border border-border p-6">
         <div className="text-center py-8">
           <AlertCircle className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-foreground mb-2">
-            Mercado Fechado
+            {isExpired && isOpen ? "Mercado Expirado" : "Mercado Fechado"}
           </h3>
           <p className="text-muted-foreground text-sm">
-            Este mercado não está mais aceitando apostas.
+            {isExpired && isOpen
+              ? "O prazo deste mercado expirou. Aguardando resolução do criador."
+              : "Este mercado não está mais aceitando apostas."}
           </p>
         </div>
       </div>

@@ -2,3 +2,6 @@ project_id = "ctyarfqgkqksuljejvjj"
 
 [functions.send-push-notification]
 verify_jwt = false
+
+[functions.close-expired-markets]
+verify_jwt = false

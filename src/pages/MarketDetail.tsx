@@ -21,6 +21,7 @@ import {
   Gavel,
   CheckCircle,
   XCircle,
+  AlertTriangle,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -236,6 +237,7 @@ const MarketDetail = () => {
 
   const yesPercentage = market.yes_probability * 100;
   const noPercentage = (1 - market.yes_probability) * 100;
+  const isExpired = new Date(market.end_date) < new Date();
 
   return (
     <div className="min-h-screen bg-background">
@@ -282,6 +284,14 @@ const MarketDetail = () => {
                         Resultado: {market.outcome ? "SIM" : "NÃO"}
                       </Badge>
                     )}
+                    {isExpired && market.status === "open" && (
+                      <Badge
+                        variant="outline"
+                        className="text-xs bg-amber-500/10 text-amber-600 border-amber-500/20"
+                      >
+                        Expirado
+                      </Badge>
+                    )}
                   </div>
                   <div className="flex items-center gap-2">
                     <MarketReferralShare marketId={market.id} marketTitle={market.title} />
@@ -303,6 +313,21 @@ const MarketDetail = () => {
                   <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6">
                     {market.description}
                   </p>
+                )}
+
+                {/* Expired Alert Banner */}
+                {isExpired && market.status === "open" && (
+                  <div className="flex items-center gap-3 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
+                    <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0" />
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-amber-600">
+                        Este mercado expirou
+                      </p>
+                      <p className="text-xs text-amber-600/80">
+                        O prazo para apostas encerrou. Aguardando o criador resolver o resultado.
+                      </p>
+                    </div>
+                  </div>
                 )}
 
                 {/* Probability Display */}
@@ -435,6 +460,7 @@ const MarketDetail = () => {
                   marketId={market.id}
                   yesProbability={market.yes_probability}
                   isOpen={market.status === "open"}
+                  endDate={market.end_date}
                   onOrderPlaced={fetchOrders}
                 />
               </div>
