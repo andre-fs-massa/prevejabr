@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { TrendingUp, TrendingDown, AlertCircle, Wallet } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import UserBetsSummary from "./UserBetsSummary";
 
 interface OrderFormProps {
   marketId: string;
@@ -28,6 +29,7 @@ const OrderForm = ({
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const [balance, setBalance] = useState<number | null>(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     if (user) {
@@ -127,6 +129,7 @@ const OrderForm = ({
     } else {
       toast.success("Aposta realizada com sucesso!");
       setAmount("");
+      setRefreshTrigger((prev) => prev + 1);
       onOrderPlaced();
     }
 
@@ -239,8 +242,15 @@ const OrderForm = ({
             >
               {((1 - yesProbability) * 100).toFixed(0)}%
             </span>
-          </button>
+        </button>
         </div>
+
+        {/* User's Bets Summary */}
+        <UserBetsSummary
+          marketId={marketId}
+          userId={user.id}
+          refreshTrigger={refreshTrigger}
+        />
 
         {/* Balance Display */}
         {balance !== null && (
