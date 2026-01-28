@@ -1,7 +1,20 @@
-import { TrendingUp, Twitter, Instagram, Linkedin, Youtube, Gamepad2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { TrendingUp, Gamepad2 } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleComoFuncionaClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    if (location.pathname === '/') {
+      document.getElementById('como-funciona')?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/', { state: { scrollTo: 'como-funciona' } });
+    }
+  };
+
   return (
     <footer className="bg-foreground text-background">
       <div className="container mx-auto px-4 py-10 sm:py-16">
@@ -13,9 +26,9 @@ const Footer = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12">
           {/* Brand */}
-          <div className="col-span-2 lg:col-span-2">
+          <div className="md:col-span-2">
             <Link to="/" className="flex items-center gap-2 mb-4 sm:mb-6">
               <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl gradient-gold flex items-center justify-center">
                 <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-secondary-foreground" />
@@ -27,50 +40,36 @@ const Footer = () => {
             <p className="text-sm sm:text-base text-background/60 mb-4 sm:mb-6 max-w-sm">
               Jogo de previsões para entretenimento. Teste suas habilidades com pontos fictícios e divirta-se!
             </p>
-            <div className="flex items-center gap-3 sm:gap-4">
-              <a href="#" className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-background/10 flex items-center justify-center hover:bg-secondary hover:text-secondary-foreground transition-colors">
-                <Twitter className="w-4 h-4 sm:w-5 sm:h-5" />
-              </a>
-              <a href="#" className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-background/10 flex items-center justify-center hover:bg-secondary hover:text-secondary-foreground transition-colors">
-                <Instagram className="w-4 h-4 sm:w-5 sm:h-5" />
-              </a>
-              <a href="#" className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-background/10 flex items-center justify-center hover:bg-secondary hover:text-secondary-foreground transition-colors">
-                <Linkedin className="w-4 h-4 sm:w-5 sm:h-5" />
-              </a>
-              <a href="#" className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-background/10 flex items-center justify-center hover:bg-secondary hover:text-secondary-foreground transition-colors">
-                <Youtube className="w-4 h-4 sm:w-5 sm:h-5" />
-              </a>
-            </div>
           </div>
 
           {/* Links */}
           <div>
-            <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Produto</h4>
+            <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Navegação</h4>
             <ul className="space-y-2 sm:space-y-3 text-background/60 text-sm">
-              <li><a href="#" className="hover:text-secondary transition-colors">Mercados</a></li>
-              <li><a href="#" className="hover:text-secondary transition-colors">Como funciona</a></li>
-              <li><a href="#" className="hover:text-secondary transition-colors">Preços</a></li>
-              <li><a href="#" className="hover:text-secondary transition-colors">API</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Empresa</h4>
-            <ul className="space-y-2 sm:space-y-3 text-background/60 text-sm">
-              <li><a href="#" className="hover:text-secondary transition-colors">Sobre nós</a></li>
-              <li><a href="#" className="hover:text-secondary transition-colors">Blog</a></li>
-              <li><a href="#" className="hover:text-secondary transition-colors">Carreiras</a></li>
-              <li><a href="#" className="hover:text-secondary transition-colors">Imprensa</a></li>
-            </ul>
-          </div>
-
-          <div className="col-span-2 sm:col-span-1">
-            <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Suporte</h4>
-            <ul className="space-y-2 sm:space-y-3 text-background/60 text-sm">
-              <li><a href="#" className="hover:text-secondary transition-colors">Central de Ajuda</a></li>
-              <li><a href="#" className="hover:text-secondary transition-colors">Contato</a></li>
-              <li><Link to="/termos" className="hover:text-secondary transition-colors">Termos de Uso</Link></li>
-              <li><a href="#" className="hover:text-secondary transition-colors">Privacidade</a></li>
+              <li>
+                <Link to="/markets" className="hover:text-secondary transition-colors">
+                  Mercados
+                </Link>
+              </li>
+              <li>
+                <a 
+                  href="#como-funciona" 
+                  onClick={handleComoFuncionaClick}
+                  className="hover:text-secondary transition-colors cursor-pointer"
+                >
+                  Como Funciona
+                </a>
+              </li>
+              <li>
+                <Link to="/leaderboard" className="hover:text-secondary transition-colors">
+                  Ranking
+                </Link>
+              </li>
+              <li>
+                <Link to="/termos" className="hover:text-secondary transition-colors">
+                  Termos de Uso
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
