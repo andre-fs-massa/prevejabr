@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Menu, X, LogOut, User, Wallet, Trophy } from "lucide-react";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import PushNotificationToggle from "@/components/PushNotificationToggle";
@@ -17,6 +17,19 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [balance, setBalance] = useState<number | null>(null);
   const { user, signOut } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleComoFuncionaClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsMenuOpen(false);
+    
+    if (location.pathname === '/') {
+      document.getElementById('como-funciona')?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/', { state: { scrollTo: 'como-funciona' } });
+    }
+  };
 
   useEffect(() => {
     if (user) {
@@ -85,7 +98,11 @@ const Header = () => {
               <Trophy className="w-4 h-4" />
               Ranking
             </Link>
-            <a href="#como-funciona" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
+            <a 
+              href="#como-funciona" 
+              onClick={handleComoFuncionaClick}
+              className="text-muted-foreground hover:text-foreground transition-colors font-medium cursor-pointer"
+            >
               Como Funciona
             </a>
           </nav>
@@ -157,7 +174,11 @@ const Header = () => {
                 <Trophy className="w-4 h-4" />
                 Ranking
               </Link>
-              <a href="#como-funciona" className="text-muted-foreground hover:text-foreground transition-colors font-medium py-2">
+              <a 
+                href="#como-funciona" 
+                onClick={handleComoFuncionaClick}
+                className="text-muted-foreground hover:text-foreground transition-colors font-medium py-2 cursor-pointer"
+              >
                 Como Funciona
               </a>
               <div className="flex flex-col gap-2 pt-4 border-t border-border">
