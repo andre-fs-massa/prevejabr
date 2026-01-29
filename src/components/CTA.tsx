@@ -36,15 +36,10 @@ const CTA = () => {
             </p>
 
             {/* CTA */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button variant="hero" size="xl">
-                Começar a Jogar
-                <ArrowRight className="w-5 h-5" />
-              </Button>
-              <Button variant="heroOutline" size="lg">
-                Falar com Suporte
-              </Button>
-            </div>
+            <Button variant="hero" size="xl">
+              Começar a Jogar
+              <ArrowRight className="w-5 h-5" />
+            </Button>
 
             {/* Trust badges */}
             <div className="flex flex-wrap items-center justify-center gap-6 mt-12 text-sm text-primary-foreground/60">
