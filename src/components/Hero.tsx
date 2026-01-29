@@ -1,8 +1,22 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, TrendingUp, Users, Shield } from "lucide-react";
+import { ArrowRight, TrendingUp, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const Hero = () => {
+  const { data: marketCount = 0 } = useQuery({
+    queryKey: ['market-count'],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from('markets')
+        .select('*', { count: 'exact', head: true });
+      
+      if (error) throw error;
+      return count || 0;
+    },
+  });
+
   return (
     <section className="relative min-h-screen gradient-hero overflow-hidden">
       {/* Decorative elements */}
@@ -48,23 +62,14 @@ const Hero = () => {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 max-w-3xl mx-auto animate-fade-in" style={{ animationDelay: "0.4s" }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: "0.4s" }}>
             <div className="flex items-center justify-center gap-3 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10">
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-secondary/20 flex items-center justify-center flex-shrink-0">
                 <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-secondary" />
               </div>
               <div className="text-left">
-                <p className="text-xl sm:text-2xl font-bold text-primary-foreground">2.5M+ pts</p>
-                <p className="text-xs sm:text-sm text-primary-foreground/60">Pontos jogados</p>
-              </div>
-            </div>
-            <div className="flex items-center justify-center gap-3 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-secondary/20 flex items-center justify-center flex-shrink-0">
-                <Users className="w-5 h-5 sm:w-6 sm:h-6 text-secondary" />
-              </div>
-              <div className="text-left">
-                <p className="text-xl sm:text-2xl font-bold text-primary-foreground">50K+</p>
-                <p className="text-xs sm:text-sm text-primary-foreground/60">Jogadores ativos</p>
+                <p className="text-xl sm:text-2xl font-bold text-primary-foreground">{marketCount}</p>
+                <p className="text-xs sm:text-sm text-primary-foreground/60">Mercados ativos</p>
               </div>
             </div>
             <div className="flex items-center justify-center gap-3 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10">
