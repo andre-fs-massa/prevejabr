@@ -77,6 +77,7 @@ const Footer = () => {
         {/* Bottom bar */}
         <div className="border-t border-background/10 mt-8 sm:mt-12 pt-6 sm:pt-8 flex flex-col items-center gap-3 sm:gap-4 text-xs sm:text-sm text-background/40">
           <p>AFSM Ltda • CNPJ: 57.591.790/0001-44</p>
+          <p>Suporte: <a href="mailto:afsmassa@gmail.com" className="hover:text-secondary transition-colors">afsmassa@gmail.com</a></p>
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
             <p>© 2024 Preveja.br. Todos os direitos reservados.</p>
             <p>Feito com 💚💛 no Brasil</p>
