@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const CTA = () => {
   return (
@@ -36,10 +37,12 @@ const CTA = () => {
             </p>
 
             {/* CTA */}
-            <Button variant="hero" size="xl">
-              Começar a Jogar
-              <ArrowRight className="w-5 h-5" />
-            </Button>
+            <Link to="/markets">
+              <Button variant="hero" size="xl">
+                Começar a Jogar
+                <ArrowRight className="w-5 h-5" />
+              </Button>
+            </Link>
 
             {/* Trust badges */}
             <div className="flex flex-wrap items-center justify-center gap-6 mt-12 text-sm text-primary-foreground/60">
