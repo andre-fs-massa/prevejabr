@@ -59,11 +59,11 @@ const MarketCard = ({
       <div className="grid grid-cols-2 gap-3 mb-4">
         <button className="flex flex-col items-center p-3 rounded-xl bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-all">
           <span className="text-xs text-muted-foreground mb-1">SIM</span>
-          <span className="text-xl font-bold text-primary">{yesPrice} pts</span>
+          <span className="text-xl font-bold text-primary">{yesPrice}%</span>
         </button>
         <button className="flex flex-col items-center p-3 rounded-xl bg-destructive/10 border border-destructive/20 hover:bg-destructive/20 transition-all">
           <span className="text-xs text-muted-foreground mb-1">NÃO</span>
-          <span className="text-xl font-bold text-destructive">{noPrice} pts</span>
+          <span className="text-xl font-bold text-destructive">{noPrice}%</span>
         </button>
       </div>
 
