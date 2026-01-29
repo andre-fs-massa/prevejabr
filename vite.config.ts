@@ -17,8 +17,8 @@ export default defineConfig(({ mode }) => ({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "robots.txt"],
       manifest: {
-        name: "Prevê Fácil - Jogo de Previsões",
-        short_name: "Prevê Fácil",
+        name: "Preveja.br - Jogo de Previsões",
+        short_name: "Preveja.br",
         description: "Teste suas previsões com pontos fictícios. Eleições, economia, esportes e muito mais. 100% gratuito e para entretenimento.",
         theme_color: "#0f172a",
         background_color: "#0f172a",
