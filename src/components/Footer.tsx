@@ -1,30 +1,26 @@
 import { TrendingUp, Gamepad2 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-
 const Footer = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
   const handleComoFuncionaClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    
     if (location.pathname === '/') {
-      document.getElementById('como-funciona')?.scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('como-funciona')?.scrollIntoView({
+        behavior: 'smooth'
+      });
     } else {
-      navigate('/', { state: { scrollTo: 'como-funciona' } });
+      navigate('/', {
+        state: {
+          scrollTo: 'como-funciona'
+        }
+      });
     }
   };
-
-  return (
-    <footer className="bg-foreground text-background">
+  return <footer className="bg-foreground text-background">
       <div className="container mx-auto px-4 py-10 sm:py-16">
         {/* Entertainment Disclaimer */}
-        <div className="bg-background/5 border border-background/10 rounded-xl p-4 mb-8 flex items-center gap-3">
-          <Gamepad2 className="w-5 h-5 text-secondary flex-shrink-0" />
-          <p className="text-xs sm:text-sm text-background/70">
-            <strong className="text-background/90">Plataforma de entretenimento.</strong> Utilizamos apenas pontos fictícios sem valor real. Não é site de apostas.
-          </p>
-        </div>
+        
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12">
           {/* Brand */}
@@ -52,11 +48,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <a 
-                  href="#como-funciona" 
-                  onClick={handleComoFuncionaClick}
-                  className="hover:text-secondary transition-colors cursor-pointer"
-                >
+                <a href="#como-funciona" onClick={handleComoFuncionaClick} className="hover:text-secondary transition-colors cursor-pointer">
                   Como Funciona
                 </a>
               </li>
@@ -84,8 +76,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
