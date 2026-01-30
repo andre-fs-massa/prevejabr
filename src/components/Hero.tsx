@@ -90,6 +90,11 @@ const Hero = () => {
               </div>
             </div>
           </div>
+
+          {/* Referral bonus text */}
+          <p className="mt-6 text-sm text-primary-foreground/70 animate-fade-in" style={{ animationDelay: "0.5s" }}>
+            🎁 Indique amigos e <span className="text-secondary font-semibold">ambos ganham 25 pontos</span> para jogar mais!
+          </p>
         </div>
       </div>
 
