@@ -4,7 +4,7 @@ const steps = [
   {
     icon: Search,
     title: "Escolha um evento",
-    description: "Navegue por centenas de mercados sobre política, economia, esportes e muito mais.",
+    description: "Navegue por vários mercados sobre política, economia, esportes e muito mais.",
   },
   {
     icon: MousePointerClick,
@@ -33,9 +33,7 @@ const HowItWorks = () => {
       <div className="container relative mx-auto px-4">
         {/* Section header */}
         <div className="text-center mb-16">
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Como Jogar
-          </h2>
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">Como Jogar</h2>
           <p className="text-muted-foreground max-w-lg mx-auto">
             Simples e divertido. Comece a jogar em minutos com pontos fictícios.
           </p>
@@ -44,11 +42,7 @@ const HowItWorks = () => {
         {/* Steps */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {steps.map((step, index) => (
-            <div
-              key={step.title}
-              className="relative animate-fade-in"
-              style={{ animationDelay: `${index * 0.15}s` }}
-            >
+            <div key={step.title} className="relative animate-fade-in" style={{ animationDelay: `${index * 0.15}s` }}>
               {/* Connector line */}
               {index < steps.length - 1 && (
                 <div className="hidden lg:block absolute top-12 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-primary/30 to-transparent" />
@@ -66,12 +60,8 @@ const HowItWorks = () => {
                 </div>
 
                 {/* Content */}
-                <h3 className="font-display text-xl font-bold text-foreground mb-3">
-                  {step.title}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  {step.description}
-                </p>
+                <h3 className="font-display text-xl font-bold text-foreground mb-3">{step.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{step.description}</p>
               </div>
             </div>
           ))}
