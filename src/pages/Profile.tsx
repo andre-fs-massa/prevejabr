@@ -5,9 +5,10 @@ import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ReferralShare from "@/components/ReferralShare";
+import NicknameEditor from "@/components/NicknameEditor";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Wallet, TrendingUp, TrendingDown, Clock, Trophy, XCircle, PlusCircle } from "lucide-react";
+import { Wallet, TrendingUp, Clock, Trophy, XCircle, PlusCircle } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -230,6 +231,11 @@ const Profile = () => {
               </div>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Nickname Editor */}
+        <div className="mb-6 sm:mb-8">
+          <NicknameEditor />
         </div>
 
         {/* Referral Share */}
