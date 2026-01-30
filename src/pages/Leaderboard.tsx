@@ -8,7 +8,7 @@ import { Trophy, Medal, Award, TrendingUp } from "lucide-react";
 
 interface LeaderboardEntry {
   user_id: string;
-  email: string;
+  display_name: string;
   total_profit: number;
   total_bets: number;
   wins: number;
@@ -88,18 +88,30 @@ const Leaderboard = () => {
       }
     });
 
-    // Get user emails
+    // Get user profiles (nicknames)
     const userIds = Object.keys(userStats);
     
-    // Since we can't access auth.users directly, we'll show masked user IDs
+    const { data: profilesData } = await supabase
+      .from("profiles")
+      .select("user_id, nickname")
+      .in("user_id", userIds);
+
+    const profilesMap = new Map<string, string | null>();
+    profilesData?.forEach((p) => {
+      profilesMap.set(p.user_id, p.nickname);
+    });
+
     const leaderboardEntries: LeaderboardEntry[] = userIds
-      .map((userId, index) => ({
-        user_id: userId,
-        email: `Usuário #${index + 1}`,
-        total_profit: userStats[userId].profit,
-        total_bets: userStats[userId].bets,
-        wins: userStats[userId].wins,
-      }))
+      .map((userId) => {
+        const nickname = profilesMap.get(userId);
+        return {
+          user_id: userId,
+          display_name: nickname ? `@${nickname}` : `Usuário ${userId.slice(0, 8)}`,
+          total_profit: userStats[userId].profit,
+          total_bets: userStats[userId].bets,
+          wins: userStats[userId].wins,
+        };
+      })
       .sort((a, b) => b.total_profit - a.total_profit)
       .slice(0, 50);
 
@@ -173,7 +185,7 @@ const Leaderboard = () => {
 
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-foreground text-sm sm:text-base truncate">
-                        {entry.email}
+                        {entry.display_name}
                       </p>
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
                         <span>{entry.total_bets} apostas</span>
