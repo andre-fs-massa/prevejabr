@@ -16,6 +16,11 @@ interface Comment {
   replies?: Comment[];
 }
 
+interface UserProfile {
+  user_id: string;
+  nickname: string | null;
+}
+
 interface MarketCommentsProps {
   marketId: string;
 }
@@ -23,6 +28,7 @@ interface MarketCommentsProps {
 interface CommentItemProps {
   comment: Comment;
   user: { id: string } | null;
+  profiles: Map<string, string | null>;
   onDelete: (id: string) => void;
   onReply: (parentId: string) => void;
   replyingTo: string | null;
@@ -36,6 +42,7 @@ interface CommentItemProps {
 const CommentItem = ({
   comment,
   user,
+  profiles,
   onDelete,
   onReply,
   replyingTo,
@@ -58,9 +65,15 @@ const CommentItem = ({
     });
   };
 
-  const formatUserId = (userId: string) => {
-    return userId.slice(0, 8);
+  const getUserDisplay = (userId: string) => {
+    const nickname = profiles.get(userId);
+    if (nickname) {
+      return { name: `@${nickname}`, initials: nickname.slice(0, 2).toUpperCase() };
+    }
+    return { name: `Usuário ${userId.slice(0, 8)}`, initials: userId.slice(0, 2).toUpperCase() };
   };
+
+  const userDisplay = getUserDisplay(comment.user_id);
 
   return (
     <div className={`${depth > 0 ? "ml-4 sm:ml-6 border-l-2 border-border pl-3 sm:pl-4" : ""}`}>
@@ -69,11 +82,11 @@ const CommentItem = ({
           <div className="flex items-center gap-2 flex-wrap">
             <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center">
               <span className="text-xs font-medium text-primary">
-                {formatUserId(comment.user_id).slice(0, 2).toUpperCase()}
+                {userDisplay.initials}
               </span>
             </div>
-            <span className="text-xs text-muted-foreground">
-              Usuário {formatUserId(comment.user_id)}
+            <span className="text-xs font-medium text-foreground">
+              {userDisplay.name}
             </span>
             <span className="text-xs text-muted-foreground">•</span>
             <span className="text-xs text-muted-foreground">
@@ -166,6 +179,7 @@ const CommentItem = ({
                   key={reply.id}
                   comment={reply}
                   user={user}
+                  profiles={profiles}
                   onDelete={onDelete}
                   onReply={onReply}
                   replyingTo={replyingTo}
@@ -192,6 +206,7 @@ const MarketComments = ({ marketId }: MarketCommentsProps) => {
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [profiles, setProfiles] = useState<Map<string, string | null>>(new Map());
 
   const buildCommentTree = (flatComments: Comment[]): Comment[] => {
     const commentMap = new Map<string, Comment>();
@@ -244,6 +259,21 @@ const MarketComments = ({ marketId }: MarketCommentsProps) => {
     } else {
       const tree = buildCommentTree(data || []);
       setComments(tree);
+
+      // Fetch profiles for all comment authors
+      const userIds = [...new Set((data || []).map((c) => c.user_id))];
+      if (userIds.length > 0) {
+        const { data: profilesData } = await supabase
+          .from("profiles")
+          .select("user_id, nickname")
+          .in("user_id", userIds);
+
+        const profilesMap = new Map<string, string | null>();
+        profilesData?.forEach((p: UserProfile) => {
+          profilesMap.set(p.user_id, p.nickname);
+        });
+        setProfiles(profilesMap);
+      }
     }
     setLoading(false);
   };
@@ -455,6 +485,7 @@ const MarketComments = ({ marketId }: MarketCommentsProps) => {
               key={comment.id}
               comment={comment}
               user={user}
+              profiles={profiles}
               onDelete={handleDelete}
               onReply={handleReply}
               replyingTo={replyingTo}
