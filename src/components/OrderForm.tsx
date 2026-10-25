@@ -160,17 +160,21 @@ const OrderForm = ({
 
   if (!user) {
     return (
-      <div className="bg-card rounded-2xl border border-border p-6">
-        <div className="text-center py-8">
-          <AlertCircle className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-foreground mb-2">
-            Faça Login para Apostar
-          </h3>
-          <p className="text-muted-foreground text-sm mb-4">
-            Você precisa estar logado para realizar apostas.
-          </p>
-          <Link to={marketAuthLink(`/markets/${marketId}`, location.search)}>
-            <Button>Entrar</Button>
+      <div className="bg-card/60 rounded-xl border border-border/60 p-3 sm:p-4">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+            <LogIn className="w-4 h-4 text-muted-foreground" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-foreground leading-tight">
+              Entre para apostar
+            </p>
+            <p className="text-xs text-muted-foreground leading-tight">
+              É grátis e leva segundos.
+            </p>
+          </div>
+          <Link to={marketAuthLink(`/markets/${marketId}`, location.search)} className="flex-shrink-0">
+            <Button size="sm">Entrar</Button>
           </Link>
         </div>
       </div>
