@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TrendingUp, TrendingDown, AlertCircle, Wallet } from "lucide-react";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { marketAuthLink } from "@/lib/authRedirect";
 import UserBetsSummary from "./UserBetsSummary";
 
 interface OrderFormProps {
@@ -25,6 +26,7 @@ const OrderForm = ({
   onOrderPlaced,
 }: OrderFormProps) => {
   const { user } = useAuth();
+  const location = useLocation();
   const [selectedSide, setSelectedSide] = useState<"yes" | "no">("yes");
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
@@ -167,7 +169,7 @@ const OrderForm = ({
           <p className="text-muted-foreground text-sm mb-4">
             Você precisa estar logado para realizar apostas.
           </p>
-          <Link to="/auth">
+          <Link to={marketAuthLink(`/markets/${marketId}`, location.search)}>
             <Button>Entrar</Button>
           </Link>
         </div>

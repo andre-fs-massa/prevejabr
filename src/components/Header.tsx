@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import PushNotificationToggle from "@/components/PushNotificationToggle";
+import { marketAuthLink } from "@/lib/authRedirect";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,6 +20,7 @@ const Header = () => {
   const { user, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const authLink = marketAuthLink(location.pathname, location.search);
 
   const handleComoFuncionaClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -145,10 +147,10 @@ const Header = () => {
             ) : (
               <>
                 <Button variant="ghost" asChild>
-                  <Link to="/auth">Entrar</Link>
+                  <Link to={authLink}>Entrar</Link>
                 </Button>
                 <Button variant="default" asChild>
-                  <Link to="/auth">Criar Conta</Link>
+                  <Link to={authLink}>Criar Conta</Link>
                 </Button>
               </>
             )}
@@ -209,10 +211,10 @@ const Header = () => {
                 ) : (
                   <>
                     <Button variant="ghost" className="w-full" asChild>
-                      <Link to="/auth">Entrar</Link>
+                      <Link to={authLink}>Entrar</Link>
                     </Button>
                     <Button variant="default" className="w-full" asChild>
-                      <Link to="/auth">Criar Conta</Link>
+                      <Link to={authLink}>Criar Conta</Link>
                     </Button>
                   </>
                 )}
