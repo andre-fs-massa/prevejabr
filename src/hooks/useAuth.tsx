@@ -2,12 +2,13 @@ import { useState, useEffect, createContext, useContext, ReactNode, useRef } fro
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+import { marketAuthLink } from '@/lib/authRedirect';
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
-  signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
+  signUp: (email: string, password: string, returnTo?: string | null) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
 }
@@ -95,8 +96,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
   }, [user]);
 
-  const signUp = async (email: string, password: string) => {
-    const redirectUrl = `${window.location.origin}/`;
+  const signUp = async (email: string, password: string, returnTo?: string | null) => {
+    const redirectUrl = `${window.location.origin}${returnTo ? marketAuthLink(returnTo) : '/auth'}`;
     
     const { error } = await supabase.auth.signUp({
       email,

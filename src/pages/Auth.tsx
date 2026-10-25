@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { TrendingUp, Mail, Lock, Eye, EyeOff, ArrowLeft, Gift } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
+import { clearMarketReturn, pendingMarketReturn, rememberMarketReturn, safeMarketReturn } from '@/lib/authRedirect';
 
 const emailSchema = z.string().email('E-mail inválido');
 const passwordSchema = z.string().min(6, 'A senha deve ter pelo menos 6 caracteres');
@@ -15,6 +16,7 @@ const passwordSchema = z.string().min(6, 'A senha deve ter pelo menos 6 caracter
 const Auth = () => {
   const [searchParams] = useSearchParams();
   const referralCode = searchParams.get('ref');
+  const returnTo = safeMarketReturn(searchParams.get('redirect'));
   
   const [isLogin, setIsLogin] = useState(!referralCode);
   const [email, setEmail] = useState('');
@@ -29,10 +31,11 @@ const Auth = () => {
 
   // Store referral code in localStorage
   useEffect(() => {
+    rememberMarketReturn(returnTo);
     if (referralCode) {
       localStorage.setItem('referral_code', referralCode);
     }
-  }, [referralCode]);
+  }, [referralCode, returnTo]);
 
   useEffect(() => {
     if (!loading && user) {
@@ -41,9 +44,11 @@ const Auth = () => {
       if (storedCode) {
         processReferral(storedCode, user.id);
       }
-      navigate('/');
+      const destination = returnTo || pendingMarketReturn() || '/';
+      clearMarketReturn();
+      navigate(destination, { replace: true });
     }
-  }, [user, loading, navigate]);
+  }, [user, loading, navigate, returnTo]);
 
   const processReferral = async (code: string, userId: string) => {
     try {
@@ -114,7 +119,7 @@ const Auth = () => {
           });
         }
       } else {
-        const { error } = await signUp(email, password);
+        const { error } = await signUp(email, password, returnTo || pendingMarketReturn());
         if (error) {
           if (error.message.includes('User already registered')) {
             toast({
