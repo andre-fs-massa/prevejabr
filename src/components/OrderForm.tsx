@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { TrendingUp, TrendingDown, AlertCircle, Wallet } from "lucide-react";
+import { TrendingUp, TrendingDown, AlertCircle, Wallet, LogIn } from "lucide-react";
 import { toast } from "sonner";
 import { Link, useLocation } from "react-router-dom";
 import { marketAuthLink } from "@/lib/authRedirect";
