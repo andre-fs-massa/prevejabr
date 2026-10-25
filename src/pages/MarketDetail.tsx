@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link, useSearchParams } from "react-router-dom";
+import { useParams, Link, useSearchParams, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/Header";
@@ -24,6 +24,7 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { toast } from "sonner";
+import { rememberMarketReturn } from "@/lib/authRedirect";
 
 interface Market {
   id: string;
@@ -56,11 +57,19 @@ const STATUS_LABELS = {
 
 const MarketDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const referralCode = searchParams.get('ref');
   const { user } = useAuth();
   const [market, setMarket] = useState<Market | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
+
+  // Capture the shared destination before any intermediate navigation to signup.
+  useEffect(() => {
+    if (!user) {
+      rememberMarketReturn(location.pathname + location.search);
+    }
+  }, [user, location.pathname, location.search]);
 
   // Store referral code in localStorage when user visits via shared link
   useEffect(() => {
