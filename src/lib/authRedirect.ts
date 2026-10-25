@@ -12,7 +12,7 @@ export function marketAuthLink(path: string, search = ''): string {
   const destination = safeMarketReturn(path + search);
   if (!destination) return '/auth';
   const params = new URLSearchParams({ redirect: destination });
-  const referral = new URLSearchParams(search).get('ref');
+  const referral = new URLSearchParams(destination.split('?')[1] || '').get('ref');
   if (referral) params.set('ref', referral);
   return `/auth?${params.toString()}`;
 }
